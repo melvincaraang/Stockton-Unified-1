@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Copernic - BLUE SPECIAL</title>
+    <link rel="shortcut icon" href="icon/icon.png" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="icon/icon.png">
+    <link rel="apple-touch-icon-precomposed" href="icon/icon.png">
+    <!-- Path to Framework7 Library CSS-->
+    <link href="css/stylesheets/framework7.min.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <!-- Path to your custom app styles-->
+    <link rel="stylesheet" href="font-awesome-4.3.0/css/font-awesome.min.css">
+    <link href="css/stylesheets/template.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="css/stylesheets/responsive.css" media="screen, projection" rel="stylesheet" type="text/css" />
+	<script type="text/javascript">
+		window.onload = function(){
+			document.getElementById("currentUser").innerHTML=localStorage.username;
+		}
+	</script>
+	
+</head>
+
+<body>
+    <!-- Status bar overlay for fullscreen mode-->
+    <div class="statusbar-overlay"></div>
+    <!-- Panels overlay-->
+    <div class="panel-overlay"></div>
+    <!-- Left panel with reveal effect-->
+    <div class="panel panel-left panel-reveal" id="side-panel">
+        <nav id="menu" class="left show">
+          <ul>
+		    <li><p id="currentUser"></p></li>
+            <li><a href="main.html"><i class="fa fa-home"></i>Home</a></li>
+            <li><a href="feature.html"><i class="fa fa-star"></i>Features</a></li>
+            <li><a href="pages.html"><i class="fa fa-file-o"></i>Pages</a></li>
+            <li><a href="blog.html"><i class="fa fa-file-text-o"></i>Blog</a></li>
+            <li><a href="gallery.html"><i class="fa fa-picture-o"></i>Gallery</a></li>
+            <li><a href="video.html"><i class="fa fa-youtube-play"></i>Videos</a></li>
+            <li><a href="contact.html"><i class="fa fa-envelope"></i>Contact</a></li>
+            <li><a href="typo.html"><i class="fa fa-font"></i>Typography</a></li>
+            <li><a href="buttons.html"><i class="fa fa-circle-o"></i>Buttons</a></li>
+            <li><a href="colors.html"><i class="fa fa-circle"></i>Colors</a></li>
+          </ul>
+        </nav>
+    </div>
+    <!-- Views-->
+    <div class="views">
+        <!-- Your main view, should have "view-main" class-->
+        <div class="view view-main">
+            <!-- Top Navbar-->
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="left">
+                        <!-- Right link contains only icon - additional "icon-only" class-->
+                        <a href="#" class="link icon-only open-panel">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
+                    <div class="center">
+                        <h2 class="title">Stockton, Unified!</h2>
+                    </div>
+                    <!-- Title of the page-->
+                </div>
+            </div>
+            <!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
+            <div class="pages navbar-through">
+                <!-- Page, data-page contains page name-->
+                <div data-page="main" class="page">
+                    <!-- Scrollable page content-->
+                    <div class="toolbar tabbar tabbar-labels-through">
+						<div class="toolbar-inner">
+							<!-- Calendar Tab -->
+							<a href="#tab1" class="tab-link">
+								<i class="fa fa-calendar"></i>
+							</a>
+							<!-- Feed Tab -->
+							<a href="#tab2" class="tab-link">
+								<i class="fa fa-newspaper-o"></i>
+							</a>
+							<!-- Resources Tab -->
+							<a href="#tab3" class="tab-link">
+								<i class="fa fa-wrench"></i>
+							</a>
+						</div>
+					</div>
+
+                        <div class="tabs-swipeable-wrap page-content">
+                            <div class="tabs">
+                                <div id="tab1" class="page-content tab">
+                                    <div class="content-block">
+                                        <h1><center>Calendar</center></h1>
+										<form action="connectionOpen.php"  method="post" >
+											<input type="submit" value="Run Me">
+										</form>
+                                    </div>
+                                </div>
+                                <div id="tab2" class="page-content active tab">
+									<h1><center>Feed</center></h1>
+                                    <div class="content-block">
+                                         <div class="page-content">
+
+											<div class="card demo-card-header-pic">
+												<div style="background:linear-gradient(to bottom,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.4)),url(img/jetty-landing-stage-sea-mountains.jpg);background-size: cover;" valign="bottom" class="card-header color-white no-border" valign="bottom" class="card-header color-white no-border">Landing Stage</div>
+												<div class="card-content">
+													<div class="card-content-inner">
+														<p class="color-gray">Posted on May 22, 2015</p>
+														<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin gravida ultricies turpis, ut consectetur eros dignissim ac. Nunc tempus porttitor scelerisque...</p>
+													</div>
+												</div>
+												<div class="card-footer">
+													<a href="article.html" class="link">Read</a>
+												</div>
+											</div>
+											<div class="card demo-card-header-pic">
+												<div style="background:linear-gradient(to bottom,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.4)),url(img/landscape-nature-forest-trees.jpg);background-size: cover;" valign="bottom" class="card-header color-white no-border">Forest Tree</div>
+												<div class="card-content">
+													<div class="card-content-inner">
+														<p class="color-gray">Posted on May 21, 2015</p>
+														<p>Phasellus eleifend viverra facilisis. Cras eu gravida sem, eget auctor nisl. Sed tellus ex, cursus at eros a, interdum venenatis justo..</p>
+													</div>
+												</div>
+												<div class="card-footer">
+													<a href="#" class="link">Read</a>
+
+												</div>
+											</div>
+											
+											<div class="card demo-card-header-pic">
+												<div style="background:linear-gradient(to bottom,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.4)),url(img/landscape-nature-sky-desert.jpg);background-size: cover;" valign="bottom" class="card-header color-white no-border" valign="bottom" class="card-header color-white no-border">How survive in desert ?</div>
+												<div class="card-content">
+													<div class="card-content-inner">
+														<p class="color-gray">Posted on May 21, 2015</p>
+														<p>Sed sed facilisis libero. Aenean non dignissim metus, eget faucibus nisl. Fusce et consequat erat. Ut sollicitudin felis non viverra fermentum. Sed ultricies mollis nisi, laoreet tincidunt massa gravida in...</p>
+													</div>
+												</div>
+												<div class="card-footer">
+													<a href="#" class="link">Read</a>
+												</div>
+											</div>
+
+											<div class="card demo-card-header-pic">
+												<div style="background:linear-gradient(to bottom,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.4)),url(img/italian-landscape-mountains-nature.jpg);background-size: cover;" valign="bottom" class="card-header color-white no-border" valign="bottom" class="card-header color-white no-border">Mountains Nature</div>
+												<div class="card-content">
+													<div class="card-content-inner">
+														<p class="color-gray">Posted on May 21, 2015</p>
+														<p>Vivamus vel ante tincidunt, tincidunt ex quis, condimentum erat. Suspendisse volutpat elit libero, non fermentum arcu egestas et...</p>
+													</div>
+												</div>
+												<div class="card-footer">
+													<a href="#" class="link">Read</a>
+												</div>
+											</div>
+
+
+											<div class="card demo-card-header-pic">
+												<div style="background:linear-gradient(to bottom,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.4)),url(img/mountains-nature-rocks-trees.jpg);background-size: cover;" valign="bottom" class="card-header color-white no-border">Rocks Trees</div>
+												<div class="card-content">
+													<div class="card-content-inner">
+														<p class="color-gray">Posted on May 18, 2015</p>
+														<p>Maecenas luctus facilisis leo non scelerisque. Curabitur sollicitudin feugiat posuere. Nam sed nulla scelerisque, volutpat nunc vel, vestibulum elit...</p>
+													</div>
+												</div>
+												<div class="card-footer">
+													<a href="#" class="link">Read</a>
+												</div>
+											</div>
+
+											<div class="card demo-card-header-pic">
+												<div style="background:linear-gradient(to bottom,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.4)),url(img/mountains-nature-sunny-bridge.jpg);background-size: cover;" valign="bottom" class="card-header color-white no-border">The Bridge</div>
+												<div class="card-content">
+													<div class="card-content-inner">
+														<p class="color-gray">Posted on May 17, 2015</p>
+														<p>Nullam scelerisque orci eu tellus finibus commodo. Curabitur scelerisque, nibh vel dignissim porttitor, ligula odio eleifend sapien, at rhoncus libero eros elementum lectus...</p>
+													</div>
+												</div>
+												<div class="card-footer">
+													<a href="#" class="link">Read</a>
+												</div>
+											</div>
+
+
+											<div class="card demo-card-header-pic">
+												<div style="background:linear-gradient(to bottom,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.4)),url(img/snow-landscape-mountains-nature.jpg);background-size: cover;" valign="bottom" class="card-header color-white no-border">Snow Landscape</div>
+												<div class="card-content">
+													<div class="card-content-inner">
+														<p class="color-gray">Posted on May 16, 2015</p>
+														<p>Suspendisse nisl risus, luctus luctus mollis ut, euismod vel orci. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus ornare odio at congue finibus...</p>
+													</div>
+												</div>
+												<div class="card-footer">
+													<a href="#" class="link">Read</a>
+												</div>
+											</div>
+
+											<div class="blog_pagination">
+												<div class="next_posts">
+													<a href="#" class="link">Next Posts</a>
+												</div>
+												<div class="previous_posts">
+													<a href="#" class="link">Previous Posts</a>
+												</div>
+											</div>
+
+										</div>
+									</div>
+                                 </div>
+                                <div id="tab3" class="page-content tab">
+									<h1><center>Resources</center></h1>
+                                    <div class="content-block">
+										<div class="page-content">
+                        <div class="content-block">
+                            <div class="row home">
+                                <div class="col-33">
+                                    <a href="feature.html" class="link">
+                                        <img class="icon" alt="icon" src="icon/feature.png" />
+                                        <span>Corporate Directory</span>
+                                    </a>
+                                </div>
+
+                                <div class="col-33">
+                                    <a href="pages.html" class="link">
+                                        <img class="icon" alt="icon" src="icon/pages.png" />
+                                        <span>School Directory</span>
+                                    </a>
+                                </div>
+                                <div class="col-33">
+                                    <a href="blog.html" class="link">
+                                        <img class="icon" alt="icon" src="icon/blog.png" />
+                                        <span>School Locations</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row home">
+                                <div class="col-33">
+                                    <a href="gallery.html" class="link">
+                                        <img class="icon" alt="icon" src="icon/gallery.png" />
+                                        <span>Email</span>
+                                    </a>
+                                </div>
+                                <div class="col-33">
+                                    <a href="video.html" class="link">
+                                        <img class="icon" alt="icon" src="icon/video.png" />
+                                        <span>Subfinder</span>
+                                    </a>
+                                </div>
+                                <div class="col-33">
+                                    <a href="contact.html" class="link">
+                                        <img class="icon" alt="icon" src="icon/contact.png" />
+                                        <span>Go Sign Me Up</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row home">
+                                <div class="col-33">
+                                    <a href="typo.html" class="link">
+                                        <img class="icon" alt="icon" src="icon/typo.png" />
+                                        <span>Typography</span>
+                                    </a>
+                                </div>
+                                <div class="col-33">
+                                    <a href="buttons.html" class="link">
+                                        <img class="icon" alt="icon" src="icon/button.png" />
+                                        <span>Buttons</span>
+                                    </a>
+                                </div>
+                                <div class="col-33">
+                                    <a href="colors.html" class="link">
+                                        <img class="icon" alt="icon" src="icon/color.png" />
+                                        <span>Colors</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery.js"></script>
+    <!-- Path to Framework7 Library JS-->
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+    <!-- Path to your app js-->
+    <script type="text/javascript" src="js/my-app.js"></script>
+</body>
+
+</html>
