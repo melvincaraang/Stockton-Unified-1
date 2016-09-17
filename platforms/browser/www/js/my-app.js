@@ -361,3 +361,53 @@ myApp.onPageInit('login', function (page) {
 myApp.onPageInit('main', function (page) {
 	
 });
+
+myApp.onPageInit('directory', function(page){
+	$.ajax({
+		type : 'POST',
+		url  : 'http://athena.ecs.csus.edu/~caraanmj/SUSD/www/school_init.php',
+		dataType : 'json',
+		encode : true
+	}).done(function (data) {
+		// handle errors
+		if (!data.success) {
+			// YEE
+		} else {
+			// display success message
+			$('#school-selected').append(data.message);
+			$('#first-item').append(data.first_school);
+		}
+	}).fail(function (data) {
+		// for debug
+		console.log(data)
+	});
+	
+	
+	$('#school-select').find('.button-round').on('click', function (e) {
+		
+		var formData = {
+			'school' : $('select[name="school-selected"]').val(),
+		};
+		
+		$.ajax({
+            type : 'POST',
+            url  : 'http://athena.ecs.csus.edu/~caraanmj/SUSD/www/school_select.php',
+            data : formData,
+            dataType : 'json',
+            encode : true
+        }).done(function (data) {
+			// handle errors
+            if (!data.success) {
+                // YEE
+            } else {
+                // display success message
+				alert(data.message[0]);
+            }
+        }).fail(function (data) {
+            // for debug
+            console.log(data)
+        });
+		
+		
+	});
+});
