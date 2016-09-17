@@ -1,8 +1,6 @@
 <?php
 include 'connectionOpen.php';//call file to connect to database
 
-echo 'HIHIHI';
-
 $errors = array(); // array to hold validation errors
 $data   = array(); // array to pass back data
 
@@ -11,18 +9,20 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$password=stripslashes(trim($_POST['password']));
 	
 	// Check if user is in database
-	$q=mysql_query("select * from `user_login` where username=`$username`");
+	$q=mysql_query("select * from `user_login` where `username`='$username' and `pw`='$password';");
+	$valid=mysql_num_rows($q);
+
+	$exist=mysql_num_rows(mysql_query("select * from `user_login` where `username`='$username';"));
 	
-	echo $q;
-	echo 'yo';
 	
 	// Error for blank username
 	if (empty($username)) {
         $errors['username'] = 'Username is required.';
-    }
 
 	//Error for username does not exist
-	  //code goes here
+	}else if($exist==0){
+		$errors['username'] = 'Username does not exist.';
+	}
 	  
 	// Error for blank password
     if (empty($password)) {
@@ -30,16 +30,21 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 	
 	// Error for wrong password
-	  //Code goes here
-	  
-	$data['query'] = $q;
-	
+	if ($valid==0){
+		$errors['password'] = 'Invalid password.';
+	}
+	  	
 	if (!empty($errors)) {
         $data['success'] = false;
         $data['errors']  = $errors;
     } else {
+	$row = mysql_fetch_array($q);
         $data['success'] = true;
-        $data['message'] = 'Login Successful';
+        $data['message'] = $row['USERNAME'];
+
+	session_start();
+	$_SESSION['username'] = $username;
+
     }
 
     // return all our data to an AJAX call
@@ -48,4 +53,5 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	
 }
+
 ?>
