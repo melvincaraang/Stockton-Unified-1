@@ -347,7 +347,7 @@ myApp.onPageInit('login', function (page) {
 				localStorage.login="true";
 				localStorage.username=data.message;
                 window.location.href = "main.html";
-				alert("Login Successful");
+				//alert("Login Successful");
             }
         }).fail(function (data) {
             // for debug
@@ -359,6 +359,8 @@ myApp.onPageInit('login', function (page) {
   });
   
 myApp.onPageInit('main', function (page) {
+	
+
 	
 });
 
@@ -382,8 +384,14 @@ myApp.onPageInit('directory', function(page){
 		console.log(data)
 	});
 	
+
+	 
 	
+	
+	/*
 	$('#school-select').find('.button-round').on('click', function (e) {
+		
+		
 		
 		var formData = {
 			'school' : $('select[name="school-selected"]').val(),
@@ -409,5 +417,63 @@ myApp.onPageInit('directory', function(page){
         });
 		
 		
+	});*/
+	
+	
+});
+/*
+myApp.onPageInit('corporateDirectory', function(page){
+	
+	
+	
+	
+	
+	$.ajax({
+		type : 'POST',
+		url  : 'http://athena.ecs.csus.edu/~otkidycm/SUSD/www/get_susd_dir.php',
+		dataType : 'json',
+		encode : true
+	}).done(function (data) {
+		// handle errors
+		if (!data.success) {
+			// YEE
+		} else {
+			// display success message
+			$('#school-selected').append(data.message);
+			$('#first-item').append(data.first_name);
+		}
+	}).fail(function (data) {
+		// for debug
+		console.log(data)
+	});
+	
+	
+	$('#staff-select').find('.button-round').on('click', function (e) {
+		
+		var formData = {
+			'get_susd_dir' : $('select[name="susd-selected"]').val(),
+		};
+		
+		$.ajax({
+            type : 'POST',
+            url  : 'http://athena.ecs.csus.edu/~otkidycm/SUSD/www/get_susd_dir.php',
+            data : formData,
+            dataType : 'json',
+            encode : true
+        }).done(function (data) {
+			// handle errors
+            if (!data.success) {
+                // YEE
+            } else {
+                // display success message
+				alert(data.message[0]);
+            }
+        }).fail(function (data) {
+            // for debug
+            console.log(data)
+        });
+		
+		
 	});
 });
+*/
