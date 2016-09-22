@@ -58,6 +58,12 @@ a, input, select, textarea {
 }
 
 /* line 15, ../sass/framework7.min.scss */
+input, select, textarea {
+  outline: 0;
+  text-indent:10%;
+}
+
+/* line 15, ../sass/framework7.min.scss */
 a {
   text-decoration: none;
   color: #007aff;
