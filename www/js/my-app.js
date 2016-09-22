@@ -445,7 +445,7 @@ myApp.onPageInit('corporateDirectory', function(page){
       success: function(data)          //on recieve of reply
       {
         
-		row_count = Object.keys(data).length;
+		row_count = Object.keys(data).length;	// number of rows in mysql database
 	
 		
 		for(var i = 0; i < row_count; i++){
@@ -458,31 +458,43 @@ myApp.onPageInit('corporateDirectory', function(page){
 			email = data[i]["EMAIL"];		 	 //get email		
 			phone_no = data[i]["PHONE_NO"];		     //get phone number	
 			
-
-			$('#list').append('<li class="card"><div class="card-header" id="name"><b>'+first_name+' '+last_name+'</b></div><div class="card-content"><div class="card-content-inner" id="department">'+department+'</div></div><div class="card-footer"><a href="#" class="confirm-ok" id="phone_no">'+phone_no+'</a></div><div class="card-footer" id="email"><u>'+email+'</u></div></li>');
-		
+			// Create our dynamic html elements
+			$('#list').append('<li class="card" id="id"><div class="card-header" id="name"><b>'+first_name+' '+last_name+'</b></div><div class="card-content"><div class="card-content-inner" id="department">'+department+'</div></div><div class="card-footer"><a href="#" class="confirm-ok" id="phone_no" on>'+phone_no+'</a></div><div class="card-footer" id="email"><u>'+email+'</u></div></li>');
+			
 		}
+		
+		
+		
 
       }
-		
+	  
 
       
     });
 	
-	
-	$$('.confirm-ok').on('click', function () {
-    myApp.confirm('Call  ' + phone_no, function () {
+	// User can dial a phone number just by clicking on the link
+	$('#list').on('click', '#phone_no', function(){
 		
-		window.open('tel:' + phone_no, '_system');
+		var phone_num = $(this).text();
+	  
+		myApp.confirm('Call  ' + phone_num, function () {
+			
+			window.open('tel:' + phone_num, '_system');
+		});	
+	   
     });
-});
 	
-	
-	
-	
-	
-	
-	
+	// User clicks on email link which launches the default mail app
+	$('#list').on('click', '#email', function(){
+		
+		var email_address = $(this).text();
+	   
+	   
+		window.open('mailto:' + email_address, '_system');
+    	
+	   
+    });
+   
 	
 	
 	
