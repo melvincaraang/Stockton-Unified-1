@@ -52,6 +52,17 @@ body {
   -webkit-touch-callout: none;
 }
 
+.icon_middle{
+	display: block;
+	text-align: center;
+}
+
+.icon_middle span{
+	display: block;
+	text-align: center;
+	padding-right: 10px;
+}
+
 /* line 15, ../sass/framework7.min.scss */
 a, input, select, textarea {
   outline: 0;
