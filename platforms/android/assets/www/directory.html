@@ -37,7 +37,7 @@
 					</div>
 					
 					<div class="center">
-                        <h2 class="title">Directory</h2>
+                        <h2 class="title">School Directory</h2>
                     </div>
 				
 					
@@ -50,17 +50,18 @@
                 </div>
             </div>
             <div class="pages navbar-through">
-                <div data-page="directory" class="page">
+                <div data-page="schoolDirectory" class="page">
                     <div class="page-content">
 <div class="list-block" id="school-select">
   <ul>
+  <li><p id="search"><center>Search Schools</center></p></li>
     <!-- Smart select item -->
     <li>
       <!-- Additional "smart-select" class -->
 	  
       <a href="#" class="item-link smart-select" data-searchbar="true" data-back-on-select="true">
         <!-- select -->
-        <select name="school-selected" id="school-selected">
+        <select name="school-selected" id="school-selected" onchange="getSchool()">
         </select>
         <div class="item-content">
           <div class="item-inner" >
@@ -76,9 +77,33 @@
   </ul>
 	<ul>
 	  
-	  <li><a href="#" id="search" class="item-link button button-round">Search</a></li>
+	  
 	</ul>
 </div>   
+
+<div class="page-content">
+				
+				
+					
+					
+					
+					<div class="list-block cards-list" id="yarg">
+					  <ul id="list">
+						<!-- populate list from database here -->
+						
+						
+						
+						
+						
+						
+					  </ul>
+					</div>
+					
+					
+					
+			
+
+                </div>
 
  
 
@@ -103,7 +128,6 @@
 	
 	
 	
-					
 					
 </body>
 </html>

@@ -81,8 +81,8 @@
     <splash density="port-xxhdpi" src="www/res/screen/android/drawable-port-xxhdpi-screen.png" />
     <splash density="port-xxxhdpi" src="www/res/screen/android/drawable-port-xxxhdpi-screen.png" />
     <allow-intent href="market:*" />
-    <name>test</name>
-    <description>Hello World sample application that responds to the deviceready event.</description>
+    <name>Stockton, Unified!</name>
+    <description>Mobile Application for the Stockton Unified School District. Created by CSUS-DREAMTEAM</description>
     <author email="support@phonegap.com" href="http://phonegap.com">PhoneGap Team</author>
     <content src="index.html" />
     <preference name="DisallowOverscroll" value="true" />

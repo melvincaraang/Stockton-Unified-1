@@ -11,6 +11,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: true
 });
 
+function onBackKeyDown() { $$(".back").click(); } 
+document.addEventListener("backbutton", onBackKeyDown, false);
 
 $$('a').on('click', function (e) { //Close panel when you open a new page
     myApp.closePanel();
@@ -364,7 +366,40 @@ myApp.onPageInit('main', function (page) {
 	
 });
 
-myApp.onPageInit('directory', function(page){
+function getSchool(){
+		
+		var formData = {
+			'school' : $('#school-select').find('select[name="school-selected"]').val(),
+		};
+		
+		
+		$.ajax({
+            type : 'POST',
+            url  : 'http://athena.ecs.csus.edu/~caraanmj/SUSD/www/school_select.php',
+            data : formData,
+            dataType : 'json',
+            encode : true
+        }).done(function (data) {
+			// handle errors
+            if (!data.success) {
+                // YEE
+				alert('not data success');
+            } else {
+                // display success message
+				
+				$('#list').html('<li class="card" id="id"><div class="card-header" id="name"><b>'+data.message['SCHOOL_NAME']+'</b></div><div class="card-content"><div class="card-content-inner" id="school_type">'+data.message['SCHOOL_TYPE']+'</div></div><div class="card-footer"><a href="#" class="confirm-ok" id="phone_no" on>'+data.message['PHONE_NO']+'</a></div><div class="card-footer" id="address"><u>'+data.message['ADDRESS']+'</u></div></li>');
+            }
+        }).fail(function (data) {
+            // for debug
+            //console.log(data);
+			alert('Fail');
+        });
+	}
+	
+myApp.onPageInit('schoolDirectory', function(page){
+	
+	
+	
 	$.ajax({
 		type : 'POST',
 		url  : 'http://athena.ecs.csus.edu/~caraanmj/SUSD/www/school_init.php',
@@ -378,102 +413,101 @@ myApp.onPageInit('directory', function(page){
 			// display success message
 			$('#school-selected').append(data.message);
 			$('#first-item').append(data.first_school);
+			$('#school-selected').val(data.first_school);
+			getSchool();
 		}
 	}).fail(function (data) {
 		// for debug
-		console.log(data)
+		//console.log(data);
+		alert(data);
 	});
 	
-
-	 
-	
-	
-	/*
-	$('#school-select').find('.button-round').on('click', function (e) {
-		
-		
-		
-		var formData = {
-			'school' : $('select[name="school-selected"]').val(),
-		};
-		
-		$.ajax({
-            type : 'POST',
-            url  : 'http://athena.ecs.csus.edu/~caraanmj/SUSD/www/school_select.php',
-            data : formData,
-            dataType : 'json',
-            encode : true
-        }).done(function (data) {
-			// handle errors
-            if (!data.success) {
-                // YEE
-            } else {
-                // display success message
-				alert(data.message[0]);
-            }
-        }).fail(function (data) {
-            // for debug
-            console.log(data)
-        });
-		
-		
-	});*/
 	
 	
 });
-/*
+
 myApp.onPageInit('corporateDirectory', function(page){
 	
+	var first_name;        //get first name
+	var last_name;         //get last name
+	var department;		 //get department		
+	var location;
+	var email;		 	 //get email		
+	var phone_no;		     //get phone number	
+	var row_count;
 	
+	$.ajax({                                      
+      url: 'http://athena.ecs.csus.edu/~otkidycm/Stockton-Unified/www/susd_get_dir.php',                  //the script to call to get data          
+      data: "",                        //you can insert url argumnets here to pass to api.php
+                                       //for example "id=5&parent=6"
+      dataType: 'json',                //data format      
+      success: function(data)          //on recieve of reply
+      {
+        
+		row_count = Object.keys(data).length;	// number of rows in mysql database
 	
-	
-	
-	$.ajax({
-		type : 'POST',
-		url  : 'http://athena.ecs.csus.edu/~otkidycm/SUSD/www/get_susd_dir.php',
-		dataType : 'json',
-		encode : true
-	}).done(function (data) {
-		// handle errors
-		if (!data.success) {
-			// YEE
-		} else {
-			// display success message
-			$('#school-selected').append(data.message);
-			$('#first-item').append(data.first_name);
+		
+		for(var i = 0; i < row_count; i++){
+		
+			
+			first_name = data[i]["FIRST_NAME"];        //get first name
+			last_name = data[i]["LAST_NAME"];         //get last name
+			department = data[i]["DEPARTMENT"];		 //get department		
+			location = data[i]["LOCATION"];
+			email = data[i]["EMAIL"];		 	 //get email		
+			phone_no = data[i]["PHONE_NO"];		     //get phone number	
+			
+			// Create our dynamic html elements
+			$('#list').append('<li class="card" id="id"><div class="card-header" id="name"><b>'+first_name+' '+last_name+'</b></div><div class="card-content"><div class="card-content-inner" id="department">'+department+'</div></div><div class="card-footer"><a href="#" class="confirm-ok" id="phone_no" on>'+phone_no+'</a></div><div class="card-footer" id="email"><u>'+email+'</u></div></li>');
+			
 		}
-	}).fail(function (data) {
-		// for debug
-		console.log(data)
-	});
+		
+		
+		
+
+      }
+	  
+
+      
+    });
+	
+	// User can dial a phone number just by clicking on the link
+	$('#list').on('click', '#phone_no', function(){
+		
+		var phone_num = $(this).text();
+	  
+		myApp.confirm('Call  ' + phone_num, function () {
+			
+			window.open('tel:' + phone_num, '_system');
+		});	
+	   
+    });
+	
+	// User clicks on email link which launches the default mail app
+	$('#list').on('click', '#email', function(){
+		
+		var email_address = $(this).text();
+	   
+	   
+		window.open('mailto:' + email_address, '_system');
+    	
+	   
+    });
+   
 	
 	
-	$('#staff-select').find('.button-round').on('click', function (e) {
-		
-		var formData = {
-			'get_susd_dir' : $('select[name="susd-selected"]').val(),
-		};
-		
-		$.ajax({
-            type : 'POST',
-            url  : 'http://athena.ecs.csus.edu/~otkidycm/SUSD/www/get_susd_dir.php',
-            data : formData,
-            dataType : 'json',
-            encode : true
-        }).done(function (data) {
-			// handle errors
-            if (!data.success) {
-                // YEE
-            } else {
-                // display success message
-				alert(data.message[0]);
-            }
-        }).fail(function (data) {
-            // for debug
-            console.log(data)
-        });
-		
-		
-	});
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 });
-*/
+
+
