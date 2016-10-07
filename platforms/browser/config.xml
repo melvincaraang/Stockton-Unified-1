@@ -4,7 +4,7 @@
     <description>Mobile Application for the Stockton Unified School District. Created by CSUS-DREAMTEAM</description>
     <author email="support@phonegap.com" href="http://phonegap.com">PhoneGap Team</author>
     <content src="index.html" />
-    <icon src="icon.png" />
+    <icon src="www/icon/susd-logo2.png" />
     <access origin="*" />
     <access launch-external="yes" origin="tel://*" />
     <access launch-external="yes" origin="geo://*" />

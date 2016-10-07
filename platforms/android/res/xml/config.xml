@@ -87,7 +87,7 @@
     <content src="index.html" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="14" />
-    <icon src="icon.png" />
+    <icon src="www/icon/susd-logo2.png" />
     <access origin="*" />
     <access launch-external="yes" origin="tel://*" />
     <access launch-external="yes" origin="geo://*" />
