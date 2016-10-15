@@ -93,6 +93,7 @@
         CSUS Dream Team
     </author>
     <content src="index.html" />
+    <preference name="Orientation" value="portrait" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="14" />
     <icon src="icon/susd-logo.png" />
