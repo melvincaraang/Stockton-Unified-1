@@ -458,8 +458,8 @@ myApp.onPageInit('corporateDirectory', function(page){
 			phone_no = data[i]["PHONE_NO"];		     //get phone number	
 			
 			// Create our dynamic html elements
-
-			$('#list').append('<li class="card" id="id"><div class="card-header" id="name"><b>'+first_name+' '+last_name+'</b></div><div class="card-content"><div class="card-content-inner" id="department">'+department+'</div></div><div class="card-footer item-link" id="phone_number"><a href="#" class="confirm-ok" id="phone_no">'+phone_no+'</a></div><div class="card-footer item-link" id="email"><u>'+email+'</u></div></li>');			
+			$('#list').append('<li class="card" id="id"><div class="card-header" id="name"><b>'+first_name+' '+last_name+'</b></div><div class="card-content"><div class="card-content-inner" id="department">'+department+'</div></div><div class="card-footer"><a href="#" class="confirm-ok" id="phone_no" on>'+phone_no+'</a></div><div class="card-footer" id="email"><u>'+email+'</u></div></li>');
+			
 		}
 		
 		
@@ -473,7 +473,6 @@ myApp.onPageInit('corporateDirectory', function(page){
 	
 	// User can dial a phone number just by clicking on the link
 	$('#list').on('click', '#phone_no', function(){
-
 		
 		var phone_num = $(this).text();
 	  

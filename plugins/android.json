@@ -13,6 +13,9 @@
         "cordova-plugin-camera": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
         },
+        "cordova-plugin-media-capture": {
+            "PACKAGE_NAME": "com.phonegap.helloworld"
+        },
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
         },
@@ -31,9 +34,6 @@
         "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
         },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
-        },
         "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
         },
@@ -47,9 +47,6 @@
             "PACKAGE_NAME": "com.phonegap.helloworld"
         },
         "cordova-plugin-media": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
-        },
-        "cordova-plugin-media-capture": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
         },
         "cordova-plugin-network-information": {
@@ -66,7 +63,17 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
+        },
+        "cordova-plugin-screen-orientation": {
+            "PACKAGE_NAME": "com.phonegap.helloworld"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.phonegap.helloworld"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.phonegap.helloworld"
+        }
+    }
 }
