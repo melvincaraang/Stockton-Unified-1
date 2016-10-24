@@ -1,5 +1,6 @@
 // Initialize your app
 var myApp = new Framework7({
+	tapHold: true
 });
 
 // Export selectors engine
@@ -38,6 +39,10 @@ myApp.onPageInit('form', function (page) {
 });
 
 myApp.onPageInit('google-map', function (page) {
+	
+	var geocoder = new google.maps.Geocoder();
+	var address = "Stockton, CA";
+	
   var myLatlng = new google.maps.LatLng(48.852873, 2.343627);
   var map;
   var mapOptions = {
@@ -51,6 +56,9 @@ myApp.onPageInit('google-map', function (page) {
       map: map,
       title: 'Hello World!'
   });
+  
+
+
 });
 
 myApp.onPageInit('notifications', function (page) {
@@ -280,7 +288,7 @@ myApp.onPageInit('signup', function (page) {
         // process the form
         $.ajax({
             type : 'POST',
-            url  : 'http://athena.ecs.csus.edu/~caraanmj/SUSD/www/signup.php',
+            url  : 'http://athena.ecs.csus.edu/~dteam/signup.php',
             data : formData,
             dataType : 'json',
             encode : true
@@ -328,7 +336,7 @@ myApp.onPageInit('login', function (page) {
         // process the form
         $.ajax({
             type : 'POST',
-            url  : 'http://athena.ecs.csus.edu/~caraanmj/SUSD/www/login.php',
+            url  : 'http://athena.ecs.csus.edu/~dteam/login.php',
             data : formData,
             dataType : 'json',
             encode : true
@@ -366,16 +374,22 @@ myApp.onPageInit('main', function (page) {
 	
 });
 
+var _school_address;
+
 function getSchool(){
 		
 		var formData = {
 			'school' : $('#school-select').find('select[name="school-selected"]').val(),
 		};
 		
+		var school_name;
+		var school_type;
+		var school_phone;
+		var school_address;
 		
 		$.ajax({
             type : 'POST',
-            url  : 'http://athena.ecs.csus.edu/~caraanmj/SUSD/www/school_select.php',
+            url  : 'http://athena.ecs.csus.edu/~dteam/school_select.php',
             data : formData,
             dataType : 'json',
             encode : true
@@ -387,7 +401,14 @@ function getSchool(){
             } else {
                 // display success message
 				
-				$('#list').html('<li class="card" id="id"><div class="card-header" id="name"><b>'+data.message['SCHOOL_NAME']+'</b></div><div class="card-content"><div class="card-content-inner" id="school_type">'+data.message['SCHOOL_TYPE']+'</div></div><div class="card-footer"><a href="#" class="confirm-ok" id="phone_no" on>'+data.message['PHONE_NO']+'</a></div><div class="card-footer" id="address"><u>'+data.message['ADDRESS']+'</u></div></li>');
+				school_name = data.message['SCHOOL_NAME'];
+				school_type = data.message['SCHOOL_TYPE'];
+				school_phone = data.message['PHONE_NO'];
+				school_address = data.message['ADDRESS'];
+				
+				$('#list').html('<li class="card" id="id"><div class="card-header" id="name"><b>'+school_name+'</b></div><div class="card-content"><div class="card-content-inner" id="school_type">'+school_type+'</div></div><div class="card-footer"><a href="#" class="confirm-ok" id="school_phone" on>'+school_phone+'</a></div><div class="card-footer"><a href="#" class=confirm-ok id="school_address" on><u>'+school_address+'</u></a></div></li>');
+				
+				_school_address = school_address;
             }
         }).fail(function (data) {
             // for debug
@@ -398,11 +419,9 @@ function getSchool(){
 	
 myApp.onPageInit('schoolDirectory', function(page){
 	
-	
-	
 	$.ajax({
 		type : 'POST',
-		url  : 'http://athena.ecs.csus.edu/~caraanmj/SUSD/www/school_init.php',
+		url  : 'http://athena.ecs.csus.edu/~dteam/school_init.php',
 		dataType : 'json',
 		encode : true
 	}).done(function (data) {
@@ -417,9 +436,41 @@ myApp.onPageInit('schoolDirectory', function(page){
 			getSchool();
 		}
 	}).fail(function (data) {
-		// for debug
+		// for debug 
 		//console.log(data);
 		alert(data);
+	});
+	
+	$('#list').on('click', '#school_phone', function(){
+		
+		var phone_num = $(this).text();
+	  
+		myApp.confirm('Call  ' + phone_num, function () {
+			
+			window.open('tel:' + phone_num, '_system');
+		});	
+	   
+    });
+	
+	$('#list').on('click', '#school_address',function(){
+		mainView.router.loadPage('schoolDirections.html');
+	});
+	
+	$('#list').on('taphold', '#school_address',function(){
+		var geocoder = new google.maps.Geocoder();
+		var pos;
+		geocoder.geocode({'address' : _school_address}, function(results, status){
+			if (status === 'OK'){
+				pos = results[0].geometry.location;
+				lat = pos.lat();
+				lng = pos.lng();
+				var url = 'http://maps.google.com/?ie=UTF8&hq=&ll='+ lat + ',' + lng + '&z=20';
+				window.open(url);
+			}
+		});
+		
+				
+
 	});
 	
 	
@@ -437,7 +488,7 @@ myApp.onPageInit('corporateDirectory', function(page){
 	var row_count;
 	
 	$.ajax({                                      
-      url: 'http://athena.ecs.csus.edu/~otkidycm/Stockton-Unified/www/susd_get_dir.php',                  //the script to call to get data          
+      url: 'http://athena.ecs.csus.edu/~dteam/susd_get_dir.php',                  //the script to call to get data          
       data: "",                        //you can insert url argumnets here to pass to api.php
                                        //for example "id=5&parent=6"
       dataType: 'json',                //data format      
@@ -489,25 +540,75 @@ myApp.onPageInit('corporateDirectory', function(page){
 		var email_address = $(this).text();
 	   
 	   
-		window.open('mailto:' + email_address, '_system');
-    	
+		window.open('mailto:' + email_address, '_system');  	
 	   
     });
-   
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 });
+
+
+function initMap(){
+		var map;
+		var mapOptions = {
+			zoom: 12,
+			center: {lat: 45, lng: -86}
+		};
+		map = new google.maps.Map(document.getElementById('map-canvas'),
+			mapOptions);
+			
+		var directionsDisplay = new google.maps.DirectionsRenderer;
+		var directionsService = new google.maps.DirectionsService;
+		var infoWindow = new google.maps.InfoWindow();
+		
+		directionsDisplay.setMap(map);
+		directionsDisplay.setPanel(document.getElementById('text-panel'));
+		
+		if (navigator.geolocation) {
+			  navigator.geolocation.getCurrentPosition(function(position) {
+				var pos = {
+				  lat: position.coords.latitude,
+				  lng: position.coords.longitude
+				};
+
+				map.setCenter(pos);
+				displayRoute(directionsService, directionsDisplay, pos);
+				
+			  }, function() {
+				handleLocationError(true, infoWindow, map.getCenter());
+			  });
+			} else {
+			  // Browser doesn't support Geolocation
+			  handleLocationError(false, infoWindow, map.getCenter());
+			}
+		  
+
+		  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+			//infoWindow.setPosition(pos);
+		  }
+
+		  
+}
+function displayRoute(directionsService, directionsDisplay, pos){
+	var start = pos;
+	var end = _school_address;
+
+	directionsService.route({
+		origin: start,
+		destination: end,
+		travelMode: 'DRIVING'
+	}, function(response, status){
+			if (status === 'OK'){
+				directionsDisplay.setDirections(response);
+			}else{
+				alert('Direction request failed due to ' + status);
+			}
+	});
+
+}
+	
+myApp.onPageInit('schoolDirections', function(page){
+	initMap();
+});
+        
 
 
