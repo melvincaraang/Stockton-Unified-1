@@ -8567,3 +8567,10 @@ html.ios-gt-6.pixel-ratio-3 .picker-calendar.picker-modal-inline .picker-calenda
 .border-red {
   border-color: #ff3b30;
 }
+
+/* line 15, ../sass/framework7.min.scss */
+#map-canvas{
+	min-height: 200px;
+	height: 50%
+	border: 1px solid blue;
+}

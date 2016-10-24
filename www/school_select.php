@@ -5,10 +5,10 @@ $errors = array(); // array to hold validation errors
 $data   = array(); // array to pass back data
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
-	$username=stripslashes(trim($_POST['school']));
+	$school=stripslashes(trim($_POST['school']));
 	
 	// Check if user is in database
-	$q=mysql_query("select * from `schools`;");
+	$q=mysql_query("select * from schools where SCHOOL_NAME='$school';");
 
 	
 	  	
@@ -18,7 +18,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
 	$row = mysql_fetch_array($q);
         $data['success'] = true;
-        $data['message'] = $row['school_name'];
+        $data['message'] = $row;
+
+	
+
 
     }
 

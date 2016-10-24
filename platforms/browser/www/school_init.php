@@ -5,7 +5,7 @@ $errors = array(); // array to hold validation errors
 $data   = array(); // array to pass back data
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {	
-	$q=mysql_query("select * from `schools`;");
+	$q=mysql_query("select * from `schools` ORDER BY SCHOOL_NAME ;");
  	
         $data['success'] = true;
 
