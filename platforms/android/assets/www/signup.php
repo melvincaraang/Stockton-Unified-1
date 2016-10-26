@@ -12,6 +12,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$email=stripslashes(trim($_POST['email']));
 	$username=stripslashes(trim($_POST['username']));
 	$password=stripslashes(trim($_POST['password']));
+
 	$confirm_password=stripslashes(trim($_POST['password2']));
 	$email_exist=mysql_num_rows(mysql_query("select * from `user_login` where `email`='$email';"));
 	$username_exist=mysql_num_rows(mysql_query("select * from `user_login` where `username`='$username';"));
@@ -57,6 +58,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if($username_exist){
 			$errors['username'] = 'Username is taken.';
 			
+
 	}
 
     if (empty($password)) {
@@ -70,6 +72,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data['success'] = false;
         $data['errors']  = $errors;
     } else {
+
 
 		$q=mysql_query("insert into `temp_members_db` (`confirm_code`,`username`,`password`, `email`) values ('$confirm_code','$username','$password','$email')");
         
