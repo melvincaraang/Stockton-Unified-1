@@ -1,5 +1,6 @@
 // Initialize your app
 var myApp = new Framework7({
+	tapHold: true
 });
 
 // Export selectors engine
@@ -280,8 +281,10 @@ myApp.onPageInit('signup', function (page) {
 
         // get the form data
         var formData = {
+			'email' : $('input[name="form-email"]').val(),
             'username' : $('input[name="form-username"]').val(),
             'password' : $('input[name="form-password"]').val(),
+			'password2' : $('input[name="form-password2"]').val(),
         };
 
         // process the form
@@ -294,6 +297,11 @@ myApp.onPageInit('signup', function (page) {
         }).done(function (data) {
 			// handle errors
             if (!data.success) {
+				if (data.errors.email) {
+                    $('#email-field').addClass('has-error');
+                    $('#email-field').find('.item-content').append('<span class="help-block">' + data.errors.email + '</span>');
+                }
+				
                 if (data.errors.username) {
                     $('#username-field').addClass('has-error');
                     $('#username-field').find('.item-content').append('<span class="help-block">' + data.errors.username + '</span>');
@@ -303,9 +311,15 @@ myApp.onPageInit('signup', function (page) {
                     $('#password-field').addClass('has-error');
                     $('#password-field').find('.item-content').append('<span class="help-block">' + data.errors.password + '</span>');
                 }
+				if (data.errors.password2) {
+                    $('#password-field').addClass('has-error');
+                    $('#password-field').find('.item-content').append('<span class="help-block">' + data.errors.password2 + '</span>');
+                }
+				
             } else {
                 // display success message
                 $form.html('<div class="content-block">' + data.message + '</div><p><a href="start.html" class="button button-round">Back</a></p>');
+				
             }
         }).fail(function (data) {
             // for debug
@@ -315,6 +329,53 @@ myApp.onPageInit('signup', function (page) {
         e.preventDefault();
     });
   });
+  
+myApp.onPageInit('retrieveCredentials', function (page) {
+	
+
+    var $form = $('#retrieve-form');
+
+      $form.find('.button-round').on('click', function (e) {
+        // remove the error class
+        $('.form-group').removeClass('has-error');
+        $('.help-block').remove();
+
+        // get the form data
+        var formData = {
+			'email' : $('input[name="form-email"]').val(),
+            
+        };
+
+        // process the form
+        $.ajax({
+            type : 'POST',
+            url  : 'http://athena.ecs.csus.edu/~dteam/retrieveCredentials.php',
+            data : formData,
+            dataType : 'json',
+            encode : true
+        }).done(function (data) {
+			// handle errors
+            if (!data.success) {
+				if (data.errors.email) {
+                    $('#email-field').addClass('has-error');
+                    $('#email-field').find('.item-content').append('<span class="help-block">' + data.errors.email + '</span>');
+                }
+				
+				
+            } else {
+                // display success message
+                $form.html('<div class="content-block">' + data.message + '</div><p><a href="start.html" class="button button-round">Back</a></p>');
+				
+            }
+        }).fail(function (data) {
+            // for debug
+            console.log(data)
+        });
+
+        e.preventDefault();
+    });
+  });
+  
   
 myApp.onPageInit('login', function (page) {
 	
@@ -435,7 +496,7 @@ myApp.onPageInit('schoolDirectory', function(page){
 			getSchool();
 		}
 	}).fail(function (data) {
-		// for debug
+		// for debug 
 		//console.log(data);
 		alert(data);
 	});
@@ -455,6 +516,26 @@ myApp.onPageInit('schoolDirectory', function(page){
 		mainView.router.loadPage('schoolDirections.html');
 	});
 	
+<<<<<<< HEAD
+=======
+	$('#list').on('taphold', '#school_address',function(){
+		var geocoder = new google.maps.Geocoder();
+		var pos;
+		geocoder.geocode({'address' : _school_address}, function(results, status){
+			if (status === 'OK'){
+				pos = results[0].geometry.location;
+				lat = pos.lat();
+				lng = pos.lng();
+				var url = 'http://maps.google.com/?ie=UTF8&hq=&ll='+ lat + ',' + lng + '&z=20';
+				window.open(url);
+			}
+		});
+		
+				
+
+	});
+	
+>>>>>>> 45dbf3f8f3c39e06cedacaa59b22b5cc56e9e966
 	
 	
 });
@@ -540,7 +621,11 @@ function initMap(){
 			
 		var directionsDisplay = new google.maps.DirectionsRenderer;
 		var directionsService = new google.maps.DirectionsService;
+<<<<<<< HEAD
 		var infoWindow = new google.maps.InfoWindow({map:map});
+=======
+		var infoWindow = new google.maps.InfoWindow();
+>>>>>>> 45dbf3f8f3c39e06cedacaa59b22b5cc56e9e966
 		
 		directionsDisplay.setMap(map);
 		directionsDisplay.setPanel(document.getElementById('text-panel'));
@@ -565,10 +650,14 @@ function initMap(){
 		  
 
 		  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+<<<<<<< HEAD
 			infoWindow.setPosition(pos);
 			infoWindow.setContent(browserHasGeolocation ?
 								  'Error: The Geolocation service failed.' :
 								  'Error: Your browser doesn\'t support geolocation.');
+=======
+			//infoWindow.setPosition(pos);
+>>>>>>> 45dbf3f8f3c39e06cedacaa59b22b5cc56e9e966
 		  }
 
 		  
