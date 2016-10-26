@@ -17,9 +17,8 @@
     <link rel="stylesheet" href="font-awesome-4.3.0/css/font-awesome.min.css">
     <link href="css/stylesheets/template.css" media="screen, projection" rel="stylesheet" type="text/css" />
     <link href="css/stylesheets/responsive.css" media="screen, projection" rel="stylesheet" type="text/css" />
-	
-	
 </head>
+
 
 <body>
     <div class="views">
@@ -37,7 +36,7 @@
 					</div>
 					
 					<div class="center">
-                        <h2 class="title">School Directory</h2>
+                        <h2 class="title"><img src="icon/susd-logo.png" width=35% height=35%></h2>
                     </div>
 				
 					
@@ -52,63 +51,47 @@
             <div class="pages navbar-through">
                 <div data-page="schoolDirectory" class="page">
                     <div class="page-content">
-<div class="list-block" id="school-select">
-  <ul>
-  <li><p id="search"><center>Search Schools</center></p></li>
-    <!-- Smart select item -->
-    <li>
-      <!-- Additional "smart-select" class -->
-	  
-      <a href="#" class="item-link smart-select" data-searchbar="true" data-back-on-select="true">
-        <!-- select -->
-        <select name="school-selected" id="school-selected" onchange="getSchool()">
-        </select>
-        <div class="item-content">
-          <div class="item-inner" >
-            <!-- Select label -->
-            <div class="item-title">School</div>
-            <!-- Selected value, not required -->
-            <div class="item-after" id="first-item"></div>
-          </div>
-        </div>
-      </a>
-    </li>
-    <!-- Another smart selects or list view elements -->
-  </ul>
-	<ul>
-	  
-	  
-	</ul>
-</div>   
+						<div class="list-block" id="school-select">
+						  <ul>
+						  <li><br><h1><center>School Directory</center></h1></li>
+						  <li><p id="search"><center>Search Schools</center></p></li>
+							<!-- Smart select item -->
+							<li>
+							  <!-- Additional "smart-select" class -->
+							  <a href="#" class="item-link smart-select" data-searchbar="true" data-back-on-select="true">
+								<!-- select -->
+								<select name="school-selected" id="school-selected" onchange="getSchool()">
+								</select>
+								<div class="item-content">
+								  <div class="item-inner" >
+									<!-- Select label -->
+									<div class="item-title">School</div>
+									<!-- Selected value, not required -->
+									<div class="item-after" id="first-item"></div>
+								  </div>
+								</div>
+							  </a>
+							</li>
+							<!-- Another smart selects or list view elements -->
+						  </ul>
 
-<div class="page-content">
-				
-				
-					
-					
-					
-					<div class="list-block cards-list" id="yarg">
-					  <ul id="list">
-						<!-- populate list from database here -->
-						
-						
-						
-						
-						
-						
-					  </ul>
-					</div>
-					
-					
-					
-			
+						</div>   
 
-                </div>
+						
+						<div class="page-content">				
+							<div class="list-block cards-list" id="yarg">
+								<ul id="list">
+												<!-- populate list from database here -->
+								</ul>
+							</div>
+											
+											
+											
+									
 
- 
-
-
-
+						</div>
+						<div id="map">
+						</div>
                     </div>
                 </div>
             </div>
