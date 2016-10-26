@@ -516,8 +516,6 @@ myApp.onPageInit('schoolDirectory', function(page){
 		mainView.router.loadPage('schoolDirections.html');
 	});
 	
-<<<<<<< HEAD
-=======
 	$('#list').on('taphold', '#school_address',function(){
 		var geocoder = new google.maps.Geocoder();
 		var pos;
@@ -535,7 +533,6 @@ myApp.onPageInit('schoolDirectory', function(page){
 
 	});
 	
->>>>>>> 45dbf3f8f3c39e06cedacaa59b22b5cc56e9e966
 	
 	
 });
@@ -621,43 +618,33 @@ function initMap(){
 			
 		var directionsDisplay = new google.maps.DirectionsRenderer;
 		var directionsService = new google.maps.DirectionsService;
-<<<<<<< HEAD
-		var infoWindow = new google.maps.InfoWindow({map:map});
-=======
 		var infoWindow = new google.maps.InfoWindow();
->>>>>>> 45dbf3f8f3c39e06cedacaa59b22b5cc56e9e966
 		
 		directionsDisplay.setMap(map);
 		directionsDisplay.setPanel(document.getElementById('text-panel'));
-		
 		if (navigator.geolocation) {
-			  navigator.geolocation.getCurrentPosition(function(position) {
+			  navigator.geolocation.getCurrentPosition(function(position) { // navigator.getolocation.getCurrentPosition not working...
 				var pos = {
 				  lat: position.coords.latitude,
 				  lng: position.coords.longitude
 				};
-
+				
 				map.setCenter(pos);
 				displayRoute(directionsService, directionsDisplay, pos);
 				
-			  }, function() {
+			  }, function(error) {
+				  alert(error.message);
 				handleLocationError(true, infoWindow, map.getCenter());
-			  });
+		}, {timeout:1000});
 			} else {
 			  // Browser doesn't support Geolocation
+			  alert("Browser does not support Geolocation");
 			  handleLocationError(false, infoWindow, map.getCenter());
 			}
 		  
 
 		  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-<<<<<<< HEAD
-			infoWindow.setPosition(pos);
-			infoWindow.setContent(browserHasGeolocation ?
-								  'Error: The Geolocation service failed.' :
-								  'Error: Your browser doesn\'t support geolocation.');
-=======
 			//infoWindow.setPosition(pos);
->>>>>>> 45dbf3f8f3c39e06cedacaa59b22b5cc56e9e966
 		  }
 
 		  

@@ -516,7 +516,6 @@ myApp.onPageInit('schoolDirectory', function(page){
 		mainView.router.loadPage('schoolDirections.html');
 	});
 	
-
 	$('#list').on('taphold', '#school_address',function(){
 		var geocoder = new google.maps.Geocoder();
 		var pos;
@@ -623,22 +622,23 @@ function initMap(){
 		
 		directionsDisplay.setMap(map);
 		directionsDisplay.setPanel(document.getElementById('text-panel'));
-		
 		if (navigator.geolocation) {
-			  navigator.geolocation.getCurrentPosition(function(position) {
+			  navigator.geolocation.getCurrentPosition(function(position) { // navigator.getolocation.getCurrentPosition not working...
 				var pos = {
 				  lat: position.coords.latitude,
 				  lng: position.coords.longitude
 				};
-
+				
 				map.setCenter(pos);
 				displayRoute(directionsService, directionsDisplay, pos);
 				
-			  }, function() {
+			  }, function(error) {
+				  alert(error.message);
 				handleLocationError(true, infoWindow, map.getCenter());
-			  });
+		}, {timeout:1000});
 			} else {
 			  // Browser doesn't support Geolocation
+			  alert("Browser does not support Geolocation");
 			  handleLocationError(false, infoWindow, map.getCenter());
 			}
 		  
