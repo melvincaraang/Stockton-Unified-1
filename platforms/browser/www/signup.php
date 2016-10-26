@@ -74,6 +74,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
 
 
+
 		$q=mysql_query("insert into `temp_members_db` (`confirm_code`,`username`,`password`, `email`) values ('$confirm_code','$username','$password','$email')");
         
 		$to=$email;
