@@ -273,20 +273,27 @@ myApp.onPageInit('signup', function (page) {
 
         // get the form data
         var formData = {
+			'email' : $('input[name="form-email"]').val(),
             'username' : $('input[name="form-username"]').val(),
             'password' : $('input[name="form-password"]').val(),
+			'password2' : $('input[name="form-password2"]').val(),
         };
 
         // process the form
         $.ajax({
             type : 'POST',
-            url  : 'http://athena.ecs.csus.edu/~caraanmj/SUSD/www/signup.php',
+            url  : 'http://athena.ecs.csus.edu/~dteam/signup.php',
             data : formData,
             dataType : 'json',
             encode : true
         }).done(function (data) {
 			// handle errors
             if (!data.success) {
+				if (data.errors.email) {
+                    $('#email-field').addClass('has-error');
+                    $('#email-field').find('.item-content').append('<span class="help-block">' + data.errors.email + '</span>');
+                }
+				
                 if (data.errors.username) {
                     $('#username-field').addClass('has-error');
                     $('#username-field').find('.item-content').append('<span class="help-block">' + data.errors.username + '</span>');
@@ -296,9 +303,15 @@ myApp.onPageInit('signup', function (page) {
                     $('#password-field').addClass('has-error');
                     $('#password-field').find('.item-content').append('<span class="help-block">' + data.errors.password + '</span>');
                 }
+				if (data.errors.password2) {
+                    $('#password-field').addClass('has-error');
+                    $('#password-field').find('.item-content').append('<span class="help-block">' + data.errors.password2 + '</span>');
+                }
+				
             } else {
                 // display success message
                 $form.html('<div class="content-block">' + data.message + '</div><p><a href="start.html" class="button button-round">Back</a></p>');
+				
             }
         }).fail(function (data) {
             // for debug
@@ -308,6 +321,53 @@ myApp.onPageInit('signup', function (page) {
         e.preventDefault();
     });
   });
+  
+myApp.onPageInit('retrieveCredentials', function (page) {
+	
+
+    var $form = $('#retrieve-form');
+
+      $form.find('.button-round').on('click', function (e) {
+        // remove the error class
+        $('.form-group').removeClass('has-error');
+        $('.help-block').remove();
+
+        // get the form data
+        var formData = {
+			'email' : $('input[name="form-email"]').val(),
+            
+        };
+
+        // process the form
+        $.ajax({
+            type : 'POST',
+            url  : 'http://athena.ecs.csus.edu/~dteam/retrieveCredentials.php',
+            data : formData,
+            dataType : 'json',
+            encode : true
+        }).done(function (data) {
+			// handle errors
+            if (!data.success) {
+				if (data.errors.email) {
+                    $('#email-field').addClass('has-error');
+                    $('#email-field').find('.item-content').append('<span class="help-block">' + data.errors.email + '</span>');
+                }
+				
+				
+            } else {
+                // display success message
+                $form.html('<div class="content-block">' + data.message + '</div><p><a href="start.html" class="button button-round">Back</a></p>');
+				
+            }
+        }).fail(function (data) {
+            // for debug
+            console.log(data)
+        });
+
+        e.preventDefault();
+    });
+  });
+  
   
 myApp.onPageInit('login', function (page) {
 	
