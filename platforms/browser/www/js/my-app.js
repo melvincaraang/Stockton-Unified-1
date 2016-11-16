@@ -466,9 +466,15 @@ function getSchool(){
 				school_phone = data.message['PHONE_NO'];
 				school_address = data.message['ADDRESS'];
 				
+				//Display information about selected school
 				$('#list').html('<li class="card" id="id"><div class="card-header" id="name"><b>'+school_name+'</b></div><div class="card-content"><div class="card-content-inner" id="school_type">'+school_type+'</div></div><div class="card-footer"><a href="#" class="confirm-ok" id="school_phone" on>'+school_phone+'</a></div><div class="card-footer"><a href="#" class=confirm-ok id="school_address" on><u>'+school_address+'</u></a></div></li>');
 				
 				_school_address = school_address;
+				
+				//Populate Staff List for selected school
+				$('#staff-list').html('<li>HI</li>');
+				
+				
             }
         }).fail(function (data) {
             // for debug
