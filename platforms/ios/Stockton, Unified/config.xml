@@ -86,7 +86,7 @@
         CSUS Dream Team
     </author>
     <content src="index.html" />
-    <icon src="icon/susd-logo.png" />
+    <icon src="www/icon/susd-logo.png" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
