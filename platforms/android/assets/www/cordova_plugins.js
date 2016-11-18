@@ -466,6 +466,13 @@ module.exports = [
         "merges": [
             "cordova.plugins.screenorientation"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-appavailability/www/AppAvailability.js",
+        "id": "cordova-plugin-appavailability.AppAvailability",
+        "clobbers": [
+            "appAvailability"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -492,7 +499,8 @@ module.exports.metadata =
     "cordova-plugin-vibration": "2.1.1",
     "cordova-plugin-whitelist": "1.2.2",
     "cordova-plugin-screen-orientation": "1.4.2",
-    "cordova-plugin-compat": "1.0.0"
+    "cordova-plugin-compat": "1.0.0",
+    "cordova-plugin-appavailability": "0.4.2"
 };
 // BOTTOM OF METADATA
 });

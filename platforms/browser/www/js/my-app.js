@@ -429,7 +429,8 @@ myApp.onPageInit('login', function (page) {
   });
   
 myApp.onPageInit('main', function (page) {
-	
+	window.open('com.twitter.android_system');
+);
 
 	
 });

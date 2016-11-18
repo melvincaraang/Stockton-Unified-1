@@ -78,6 +78,9 @@
     <feature name="Vibration">
         <param name="ios-package" value="CDVVibration" />
     </feature>
+    <feature name="AppAvailability">
+        <param name="ios-package" value="AppAvailability" />
+    </feature>
     <name>Stockton, Unified</name>
     <description>
         Mobile Application for the Stockton Unified School District. Created by CSUS-DREAMTEAM
@@ -86,6 +89,7 @@
         CSUS Dream Team
     </author>
     <content src="index.html" />
+    <gap:plugin name="com.ohh2ahh.plugins.appavailability" version="0.3.1" />
     <icon src="www/icon/susd-logo.png" />
     <access origin="*" />
     <allow-intent href="http://*/*" />

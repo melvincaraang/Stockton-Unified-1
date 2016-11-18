@@ -99,6 +99,10 @@
                         {
                             "xml": "<feature name=\"Vibration\"><param name=\"ios-package\" value=\"CDVVibration\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"AppAvailability\"><param name=\"ios-package\" value=\"AppAvailability\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -180,6 +184,9 @@
             "PACKAGE_NAME": "com.phonegap.helloworld"
         },
         "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.phonegap.helloworld"
+        },
+        "cordova-plugin-appavailability": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
         }
     },
@@ -760,6 +767,14 @@
                 "navigator.notification",
                 "navigator"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-appavailability/www/AppAvailability.js",
+            "id": "cordova-plugin-appavailability.AppAvailability",
+            "pluginId": "cordova-plugin-appavailability",
+            "clobbers": [
+                "appAvailability"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -784,6 +799,7 @@
         "cordova-plugin-splashscreen": "3.2.2",
         "cordova-plugin-statusbar": "2.1.3",
         "cordova-plugin-vibration": "2.1.2",
-        "cordova-plugin-whitelist": "1.2.2"
+        "cordova-plugin-whitelist": "1.2.2",
+        "cordova-plugin-appavailability": "0.4.2"
     }
 }
