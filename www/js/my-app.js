@@ -429,8 +429,10 @@ myApp.onPageInit('login', function (page) {
   });
   
 myApp.onPageInit('main', function (page) {
-	window.open('com.twitter.android_system');
-);
+	
+$('#email').on('click', '#email_link',function(){
+		mainView.router.loadPage('schoolDirections.html');
+	});
 
 	
 });
