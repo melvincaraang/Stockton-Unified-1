@@ -174,5 +174,21 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-plugin-appavailability": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-appavailability"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-themeablebrowser": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-themeablebrowser@~0.2.17"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }
