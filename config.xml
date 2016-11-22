@@ -12,9 +12,7 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="14" />
 	<plugin name="cordova-plugin-appavailability" />
-	<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-	id="com.venkykowshik.startapp"
-	version="0.0.1">
+	<plugin spec="https://github.com/venkykowshik/startapp.git" source="git" />
     <plugin name="cordova-plugin-battery-status" source="npm" spec="~1.1.1" />
     <plugin name="cordova-plugin-camera" source="npm" spec="~2.1.1" />
     <plugin name="cordova-plugin-media-capture" source="npm" spec="~1.2.0" />
