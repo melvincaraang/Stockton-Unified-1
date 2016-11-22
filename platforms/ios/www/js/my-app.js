@@ -430,10 +430,7 @@ myApp.onPageInit('login', function (page) {
   
 myApp.onPageInit('main', function (page) {
 	
-$('#email').on('click', '#email_link',function(){
-		mainView.router.loadPage('schoolDirections.html');
-	});
-
+	
 	
 });
 
@@ -487,6 +484,16 @@ function getSchool(){
 	}
 	
 myApp.onPageInit('schoolDirectory', function(page){
+	
+	console.log("Main init");
+	navigator.startApp.check("com.twitter.android-1", function(message) { /* success */
+    	console.log(message); // => OK
+		alert("Twitter installeld");
+	}, 
+	function(error) { /* error */
+		console.log(error);
+		alert("Twitter not installed");
+	});
 	
 	$.ajax({
 		type : 'POST',
