@@ -618,6 +618,14 @@ module.exports = [
         "clobbers": [
             "appAvailability"
         ]
+    },
+    {
+        "file": "plugins/com.venkykowshik.startapp/www/startApp.js",
+        "id": "com.venkykowshik.startapp.startapp",
+        "pluginId": "com.venkykowshik.startapp",
+        "merges": [
+            "navigator.startApp"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -645,7 +653,8 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.2.2",
     "cordova-plugin-compat": "1.0.0",
     "cordova-plugin-screen-orientation": "1.4.2",
-    "cordova-plugin-appavailability": "0.4.2"
+    "cordova-plugin-appavailability": "0.4.2",
+    "com.venkykowshik.startapp": "0.0.1"
 }
 // BOTTOM OF METADATA
 });

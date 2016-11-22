@@ -69,6 +69,9 @@
         },
         "cordova-plugin-appavailability": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
+        },
+        "com.venkykowshik.startapp": {
+            "PACKAGE_NAME": "com.phonegap.helloworld"
         }
     },
     "dependent_plugins": {

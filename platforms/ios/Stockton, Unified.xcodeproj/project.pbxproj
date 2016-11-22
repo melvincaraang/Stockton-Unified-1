@@ -55,6 +55,7 @@
 		F59DBCA89D574907B16F271C /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = E90B062B6DB047B38FF2B84C /* CDVStatusBar.m */; };
 		BD72CE59F42044BF9C5570D1 /* CDVVibration.m in Sources */ = {isa = PBXBuildFile; fileRef = C0AAE46DFBF1455FBAEEFDAC /* CDVVibration.m */; };
 		8842BE96BAD348ABBB2199CC /* AppAvailability.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B9D86A20F74FBCA9646D77 /* AppAvailability.m */; };
+		471A62EBD658491CB122D084 /* startApp.m in Sources */ = {isa = PBXBuildFile; fileRef = B74FA43F0E1249398D39FE11 /* startApp.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -164,6 +165,8 @@
 		E3902143975B4A8F8B10B545 /* CDVVibration.h */ = {isa = PBXFileReference; name = "CDVVibration.h"; path = "cordova-plugin-vibration/CDVVibration.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		B2B9D86A20F74FBCA9646D77 /* AppAvailability.m */ = {isa = PBXFileReference; name = "AppAvailability.m"; path = "cordova-plugin-appavailability/AppAvailability.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		AAC0056FCB9348EC9BDC0AE4 /* AppAvailability.h */ = {isa = PBXFileReference; name = "AppAvailability.h"; path = "cordova-plugin-appavailability/AppAvailability.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		B74FA43F0E1249398D39FE11 /* startApp.m */ = {isa = PBXFileReference; name = "startApp.m"; path = "com.venkykowshik.startapp/startApp.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		32FDE926583641B8A7E4D98D /* startApp.h */ = {isa = PBXFileReference; name = "startApp.h"; path = "com.venkykowshik.startapp/startApp.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -345,6 +348,8 @@
 				E3902143975B4A8F8B10B545 /* CDVVibration.h */,
 				B2B9D86A20F74FBCA9646D77 /* AppAvailability.m */,
 				AAC0056FCB9348EC9BDC0AE4 /* AppAvailability.h */,
+				B74FA43F0E1249398D39FE11 /* startApp.m */,
+				32FDE926583641B8A7E4D98D /* startApp.h */,
 			);
 			name = Plugins;
 			path = "Stockton, Unified/Plugins";
@@ -490,6 +495,7 @@
 				F59DBCA89D574907B16F271C /* CDVStatusBar.m in Sources */,
 				BD72CE59F42044BF9C5570D1 /* CDVVibration.m in Sources */,
 				8842BE96BAD348ABBB2199CC /* AppAvailability.m in Sources */,
+				471A62EBD658491CB122D084 /* startApp.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -429,11 +429,12 @@ myApp.onPageInit('login', function (page) {
   });
   
 myApp.onPageInit('main', function (page) {
-	
-$('#email').on('click', '#email_link',function(){
-		mainView.router.loadPage('schoolDirections.html');
+	navigator.startApp.check("com.twitter.android-1", function(message) { /* success */
+    console.log(message); // => OK
+	}, 
+	function(error) { /* error */
+		console.log(error);
 	});
-
 	
 });
 
