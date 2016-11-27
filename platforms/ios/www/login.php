@@ -41,7 +41,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$row = mysql_fetch_array($q);
         $data['success'] = true;
         $data['message'] = $row['USERNAME'];
-		$data['pw'] = $row['PW'];
 
 	session_start();
 	$_SESSION['username'] = $username;
