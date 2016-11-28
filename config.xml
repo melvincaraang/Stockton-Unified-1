@@ -30,7 +30,7 @@
   <plugin name="cordova-plugin-vibration" source="npm" spec="~2.1.0"/>
   <plugin name="cordova-plugin-whitelist" source="npm" spec="~1.2.1"/>
   <plugin name="cordova-plugin-themeablebrowser" source="npm" spec="~0.2.17"/>
-  <icon src="www/icon/susd-logo.png"/>
+  <icon src="www/icon/susd-logo2.png"/>
   <platform name="android">
     <splash src="www/res/screen/android/drawable-land-ldpi-screen.png" density="land-ldpi"/>
     <splash src="www/res/screen/android/drawable-land-mdpi-screen.png" density="land-mdpi"/>
