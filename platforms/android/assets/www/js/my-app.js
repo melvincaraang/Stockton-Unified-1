@@ -1,26 +1,574 @@
-// Initialize your app
+// EXPORT SELECTORS ENGINE
+var $$ = Dom7;
 
-var myApp = new Framework7({
-	tapHold: true,
-	swipePanel: 'right',
-	smartSelectOpenIn:'popup'
-	//smartSelectSearchbar:true
-	
+
+
+var selectedDate = new Date();
+
+
+var event_dates = [];
+
+
+
+$.when(loadCalendarEvents()).done(function(a1){
+    // the code here will be executed when the ajax request is finished
+	createCalendar();	//create calendar after we have fetched all the calendar events
 	
 	
 });
 
-// Export selectors engine
-var $$ = Dom7;
+function loadCalendarEvents() {
+    // NOTE:  This function must return the value 
+    //        from calling the $.ajax() method.
+    return $.ajax({
+		type : 'POST',
+		url  : 'http://athena.ecs.csus.edu/~dteam/get_calendar_event_dates.php',
+		dataType : 'json',
+		encode : true
+	}).done(function (data) {
+		// handle errors
+		if (!data.success) {
+			// YEE
+			alert('error');
+		} else {
+			// display success message
+			var row_count = data.length;
+			
+			
+			for(var i = 0; i < row_count; i++){
+				
+				var event_date = data[i]['EVENT_DATE'];
+				var newdate = new Date(+event_date);
+				
+			
+				event_dates.push(newdate);	//populate our array that holds all our calendar events
+				
+				
+				
+			}
+			
+			
+
+		}
+	}).fail(function (data) {
+		// for debug 
+		
+		alert('fail');
+	});
+}
 
 
-// Add view
+
+
+
+// Initialize your app
+var myApp = new Framework7({
+	
+	swipePanel: 'right',
+	
+	onPageInit: function (app, page) {
+    if (page.name === 'main') {
+			
+
+			
+			
+			var Admin = 0;
+			Admin = localStorage.admin;
+			
+			//IF USER IS AN ADMIN THEN LOAD NEWS FEED WITH ABILITY TO EDIT AND CREATE NEW POSTS
+			if(Admin == 0){
+				getNewsFeedReadOnly();
+			}
+			//IF USER IS NOT AN ADMIN THEN LOAD NEWS FEED (READ ONLY)
+			else if(Admin == 1){
+				getNewsFeedWithPrivileges();
+				$('#addEventlistblock').append('<a href="#" id="addEventBtn" class="item-link list-button create-popup">Add Event</a>');
+			}
+				
+
+			$('#new_post').on('click',function(){
+				//IF USER CLICKS ON 'POST TO NEWS FEED' BUTTON
+				mainView.router.loadPage('post_news_story.html');
+			
+			});
+			
+			
+			//SIDEBAR
+			$('#homepage').on('click',function(){
+				//IF USER CLICKS ON 'HOME' BUTTON IN THE SIDEBAR
+				
+				window.location.href="main.html";
+			});
+			
+			
+			$('#help_and_support').on('click',function(){
+				//IF USER CLICKS ON 'HELP AND SUPPORT' BUTTON IN THE SIDEBAR
+				
+				mainView.router.loadPage('help_and_support.html');
+			});
+			
+			
+			$('#logout').on('click',function(){
+				//IF USER CLICKS ON 'LOGOUT' BUTTON IN THE SIDEBAR
+				localStorage.clear();
+				mainView.router.loadPage('start.html');
+			
+			});
+			
+			
+			var ptrContent = $$('.pull-to-refresh-content');
+			
+			
+			$('#res').on('click',function(){
+				
+				
+				myApp.params.swipePanel = 'right';
+				
+				
+				myApp.destroyPullToRefresh(page.container);	//DISABLE 'PULL TO REFRESH' IN RESOURCES PAGE
+				
+				
+			});
+			
+			$('#feed').on('click',function(){
+
+				
+				myApp.params.swipePanel = 'right';
+				
+			
+				myApp.initPullToRefresh(page.container);	//ENABLE 'PULL TO REFRESH' IN NEWS FEED
+				
+
+			});
+
+
+			
+			$('#calendar').on('click',function(){
+
+				myApp.destroyPullToRefresh(page.container);	//DISABLE 'PULL TO REFRESH' IN CALENDAR PAGE
+				//var myCalendar = $$('#calendar-inline-container');
+				//myCalendar.close();
+				
+				var swipePanel = myApp.params.swipePanel;
+				if(swipePanel == "right"){
+					myApp.params.swipePanel = false;
+				}
+				
+				
+
+
+			});
+			
+			
+			
+			ptrContent.on('refresh', function (e) {
+				myApp.params.swipePanel = true;
+				setTimeout(function () {
+					
+					window.location.href="main.html";
+					myApp.pullToRefreshDone();
+				}, 1000);
+					
+			});
+			
+			
+		}
+	}
+  
+	
+});
+
+
+
+			
+			
+// ADD VIEW
 var mainView = myApp.addView('.view-main', {
     // Because we use fixed-through navbar we can enable dynamic navbar
     dynamicNavbar: true
 	
 	
 });
+
+
+
+
+function createCalendar(){
+
+var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August' , 'September' , 'October', 'November', 'December'];
+
+ 
+var calendarInline = myApp.calendar({
+	container: '#calendar-inline-container',
+	value: [new Date()],
+	firstDay: 0,
+	events: event_dates,
+	weekHeader: true,
+	toolbarTemplate: 
+		'<div class="toolbar calendar-custom-toolbar">' +
+			'<div class="toolbar-inner">' +
+				'<div class="left">' +
+					'<a href="#" class="link icon-only"><i class="icon icon-back"></i></a>' +
+				'</div>' +
+				'<div class="center"></div>' +
+				'<div class="right">' +
+					'<a href="#" class="link icon-only"><i class="icon icon-forward"></i></a>' +
+				'</div>' +
+			'</div>' +
+		'</div>',
+		
+		
+	onOpen: function (p) {
+		
+		
+		$$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] +', ' + p.currentYear);
+		$$('.calendar-custom-toolbar .left .link').on('click', function () {
+			calendarInline.prevMonth();
+		});
+		$$('.calendar-custom-toolbar .right .link').on('click', function () {
+			calendarInline.nextMonth();
+		});
+		
+	},
+	onMonthYearChangeStart: function (p) {
+		
+		$$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] +', ' + p.currentYear);
+		
+	},
+	
+	onDayClick: function(p, dayContainer, year, month, day){
+		
+		
+		
+		
+		selectedDate = new Date(year,month,day);
+		//alert(selectedDate);
+		//alert(event_dates);
+		
+		if ($(dayContainer).hasClass('picker-calendar-day-has-events') ) {
+ 
+			
+			eventViewer();
+			
+		}
+		else {
+			
+			clearEventViewer();
+		}
+
+		
+	}
+	
+
+});
+
+
+}
+
+
+
+function clearEventViewer(){
+	
+	$('#event-viewer').empty();	//clear event viewer
+}
+
+var event_title; 
+var event_description;
+var event_start_time;
+
+
+function eventViewer(){
+	
+	clearEventViewer();
+
+
+	
+	$.when(loadCalendarEventData()).done(function(a1){
+    // the code here will be executed when the ajax request is finished
+	// create calendar event block
+	
+		$('#event-viewer').append('<div class="content-block-title">'+
+									'<p>Events on: '+selectedDate+'</p>'+
+								'</div>'+
+									'<div class="card">'+
+									'<br>'+
+								  '<div class="center" style="font-size:150%;color:red;" >'+event_title+'</div>'+
+								  '<div class="card-content">'+
+								  
+									'<div class="card-content-inner">Details: '+event_description+'</div>'+
+								  '</div>'+
+								  '<div class="card-footer" id="footer">'+
+										'<i class="fa fa-calendar" aria-hidden="true">&nbsp;'+selectedDate+'</i>'+
+										'<i class="fa fa-clock-o" aria-hidden="true">&nbsp;'+event_start_time+'</i>'+
+										
+								  '</div>'+
+								  
+								'</div>');
+								
+								
+		if(localStorage.admin == 1){
+			$('#event-viewer').find('#footer').append('<div class="content-block"><a href="#" id="delete-event"  onclick="deleteEvent();" style="color:red;">delete</a></div>');
+		}
+	
+	
+	});
+
+
+	
+}
+
+
+
+
+function deleteEvent(){
+	
+	
+	var text = 'Delete event?';
+	
+	myApp.modal({
+    title:  'Alert',
+	bold: false,
+    text: text,
+    buttons: [
+      {
+        text: 'Cancel',
+        onClick: function() {
+			
+        }
+      },
+	  	  
+      {
+        text: 'OK',
+        bold: false,
+        onClick: function() {
+			
+			
+			var formData = {
+			
+				'date' : selectedDate
+					
+			};
+			
+			
+			$.ajax({
+				type : 'POST',
+				url  : 'http://athena.ecs.csus.edu/~dteam/delete_event.php',
+				data : formData,
+				dataType : 'json',
+				encode : true
+			}).done(function (data) {
+				// handle errors
+				if (!data.success) {
+					alert('error');
+					
+				} else {
+					// display success message
+					myApp.alert('deleted!')
+					window.location.href="main.html";
+					
+				}
+			}).fail(function (data) {
+				// for debug
+				console.log(data);
+			});
+	
+	
+			
+			
+			
+          
+        }
+      },
+    ]
+  });
+	
+
+	
+}
+
+
+
+function loadCalendarEventData(){
+	
+	
+	selectedDate = selectedDate.toISOString().substring(0, 10);
+	
+	
+	var formData = {
+			'date' : selectedDate
+            
+	};
+
+	// process the form
+	return $.ajax({
+		type : 'POST',
+		url  : 'http://athena.ecs.csus.edu/~dteam/get_calendar_event.php',
+		data : formData,
+		dataType : 'json',
+		encode : true
+	}).done(function (data) {
+		// handle errors
+		if (!data.success) {
+			alert('error');
+			
+		} else {
+			// display success message
+			event_title = data['EVENT_NAME'];
+			event_description = data['DESCRIPTION'];
+			event_start_time = data['TIME'];
+			
+			
+		}
+	}).fail(function (data) {
+		// for debug
+		console.log(data);
+	});
+	
+	
+	
+}
+
+
+
+$('#addEventBtn').on('click',function(){
+	
+	
+	selectedDate = selectedDate.toISOString().substring(0, 10);
+	//alert(selectedDate);
+				
+});
+
+
+						
+							
+
+$$('.create-popup').on('click', function () {
+  var popupHTML = '<div class="popup">'+
+                    '<div class="content-block">'+
+                      '<p><a href="#" class="close-popup" style="color:#ff3b30; font-size: 135%;">Cancel</a></p>'+
+					'</div>'+
+					  '<div class="list-block">'+
+					  '<ul>'+
+						'<li class="item-content">'+
+						  '<div class="item-inner">'+
+							'<div class="item-title"><span>Event Date:&nbsp;&nbsp;&nbsp;&nbsp;'+selectedDate+'</span> </div>'+
+						  '</div>'+
+						'</li>'+
+						'<li class="item-content">'+
+							
+						  '<div class="item-inner">'+
+							'<div class="item-title label">Start Time</div>'+
+							'<div class="item-input">'+
+								'<input type="time" id="time" name="form-event-time" value="time">'+
+							'</div>'+
+						  '</div>'+
+						'</li>'+
+						
+						
+						
+						'<li class="item-content">'+
+							
+						  '<div class="item-inner">'+
+							'<div class="item-title label">Title</div>'+
+							'<div class="item-input">'+
+								'<input type="text" id="title" name="form-event-title" placeholder="Title">'+
+							'</div>'+
+						  '</div>'+
+						'</li>'+
+						'<li class="item-content">'+
+						  '<div class="item-inner">'+
+							'<div class="item-title label">Description</div>'+
+							'<div class="item-input">'+
+								'<input type="text" id="description" name="form-event-description" placeholder="Description">'+
+							'</div>'+
+						  '</div>'+
+						'</li>'+
+					  '</ul>'+
+					'</div>'+
+					'<p class="row">'+
+						'<div class="list-block">'+
+						  '<ul>'+
+							'<li>'+
+							  '<a href="#" onclick = "submitEvent();" id="submit-event-btn" class="item-link list-button">Add Event</a>'+
+							'</li>'+
+						  '</ul>'+
+						'</div>'  +
+					'</p>'+
+                  '</div>'
+					
+				  
+
+				  
+  myApp.popup(popupHTML);
+});    
+
+
+function submitEvent(){
+		
+	
+		var time = $('input[name="form-event-time"]').val();
+		var title = $('input[name="form-event-title"]').val()
+		var input_has_errors = false;
+		
+		
+		
+		
+		//CHECK IF INPUTS ARE EMPTY - IF SO, THEN SHOW ERROR ALERT	
+		if((title==null || title=="") ||(time==null || time=="")){
+			input_has_errors = true;
+			myApp.alert('Start Time and Title are required','Error');
+		}
+		
+
+		
+		//IF INPUT HAS NO ERRORS
+		if(!input_has_errors){
+			
+		
+			var formData = {
+				'title' : $('input[name="form-event-title"]').val(),
+				'description' : $('input[name="form-event-description"]').val(),
+				'event_date' : selectedDate,
+				'time':	$('input[name="form-event-time"]').val()
+			};
+			
+			
+			$.ajax({
+				type : 'POST',
+				url  : 'http://athena.ecs.csus.edu/~dteam/add_calendar_event.php',
+				data : formData,
+				dataType : 'json',
+				encode : true
+			}).done(function (data) {
+				// handle errors
+				if (!data.success) {
+					myApp.alert('An error occurred');
+					
+				} else {
+					// display success message
+					//myApp.alert('Posted!');
+					//myApp.closeModal('.popup');
+					window.location.href="main.html";
+					
+					
+		
+					
+					
+				
+				}
+			}).fail(function (data) {
+				// for debug
+				
+				alert('Server error');
+			});
+		
+		}
+		
+		
+
+}
+
+
 
 
 function onBackKeyDown() { $$(".back").click(); } 
@@ -32,12 +580,7 @@ $$('a').on('click', function (e) { //Close panel when you open a new page
 
 
 // Callbacks to run specific code for specific pages, for example for About page:
-myApp.onPageInit('about', function (page) {
-});
 
-myApp.onPageInit('tab', function (page) {
-	
-});
 
 myApp.onPageInit('list', function (page) {
     $$('.action1').on('click', function () {
@@ -48,92 +591,10 @@ $$('.action2').on('click', function () {
 }); 
 });
 
-myApp.onPageInit('form', function (page) {
-});
 
 
 
-myApp.onPageInit('google-map', function (page) {
-	
-	var geocoder = new google.maps.Geocoder();
-	var address = "Stockton, CA";
-	
-  var myLatlng = new google.maps.LatLng(48.852873, 2.343627);
-  var map;
-  var mapOptions = {
-    zoom: 12,
-    center: myLatlng
-  };
-  map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
-      var marker = new google.maps.Marker({
-      position: myLatlng,
-      map: map,
-      title: 'Hello World!'
-  });
-  
-
-
-});
-
-
-myApp.onPageInit('calendar', function (page) {
-    // Default
-
-	
-	
-
-      var calendarDefault = myApp.calendar({
-          input: '#calendar-default'
-      });
-      // With custom date format
-      var calendarDateFormat = myApp.calendar({
-          input: '#calendar-date-format',
-          dateFormat: 'DD, MM dd, yyyy'
-      });
-      // With multiple values
-      var calendarMultiple = myApp.calendar({
-          input: '#calendar-multiple',
-          dateFormat: 'M dd yyyy',
-          multiple: true
-      });
-      // Inline with custom toolbar
-      var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August' , 'September' , 'October', 'November', 'December'];
-      var calendarInline = myApp.calendar({
-          container: '#calendar-inline-container',
-          value: [new Date()],
-          weekHeader: false,
-          toolbarTemplate: 
-              '<div class="toolbar calendar-custom-toolbar">' +
-                  '<div class="toolbar-inner">' +
-                      '<div class="left">' +
-                          '<a href="#" class="link icon-only"><i class="fa fa-chevron-left"></i></a>' +
-                      '</div>' +
-                      '<div class="center"></div>' +
-                      '<div class="right">' +
-                          '<a href="#" class="link icon-only"><i class="fa fa-chevron-right"></i></a>' +
-                      '</div>' +
-                  '</div>' +
-              '</div>',
-          onOpen: function (p) {
-              $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] +', ' + p.currentYear);
-              $$('.calendar-custom-toolbar .left .link').on('click', function () {
-                  calendarInline.prevMonth();
-              });
-              $$('.calendar-custom-toolbar .right .link').on('click', function () {
-                  calendarInline.nextMonth();
-              });
-          },
-          onMonthYearChangeStart: function (p) {
-              $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] +', ' + p.currentYear);
-          }
-});
-});
-
-
-
-
-
+//LOGIN PAGE - login.html
 myApp.onPageInit('login-screen', function (page) {
 	
   var pageContainer = $$(page.container);
@@ -147,10 +608,11 @@ myApp.onPageInit('login-screen', function (page) {
 });   
 
 
-myApp.onPageInit('404', function (page) { 
+myApp.onPageInit('404', function (page) {
+	
 });
 
-
+//REGISTRATION PAGE - signup.html
 myApp.onPageInit('signup', function (page) {
 	
 
@@ -212,6 +674,7 @@ myApp.onPageInit('signup', function (page) {
         e.preventDefault();
     });
   });
+
   
 myApp.onPageInit('retrieveCredentials', function (page) {
 	
@@ -259,6 +722,10 @@ myApp.onPageInit('retrieveCredentials', function (page) {
     });
   });
  
+ 
+var is_user_an_admin;
+
+
   
 myApp.onPageInit('login', function (page) {
 	
@@ -267,7 +734,7 @@ myApp.onPageInit('login', function (page) {
     var $form = $('#login-form');
 	
 	
-	if(localStorage.username === ""|| localStorage.username === null || localStorage.username === "null" || localStorage.username === "undefined" || localStorage.password === ""|| localStorage.password === null || localStorage.password === "null" || localStorage.password === "undefined"){
+	//if(localStorage.username === ""|| localStorage.username === null || localStorage.username === "null" || localStorage.username === "undefined" || localStorage.password === ""|| localStorage.password === null || localStorage.password === "null" || localStorage.password === "undefined"){
 		
 	//else if(user_name == "" || user_name == null || user_name == "null" || user_name == "undefined" || pass == ""|| pass == null || pass == "null" || pass == "undefined"){
       $form.find('.button-round').on('click', function (e) {
@@ -304,14 +771,37 @@ myApp.onPageInit('login', function (page) {
                 }
             } else {
                 // display success message
-				localStorage.login="true";
-				localStorage.username=data.message;
+					localStorage.login="true";
+					localStorage.username=data.message;
+					//is_user_an_admin = data['ADMIN'];
+					localStorage.admin = data['ADMIN'];
+					window.location.href = "main.html";
+					//alert(is_user_an_admin);
+					//checkIfUserIsAdmin();
+					
+					/*
+					//DISPLAY DIFFERENT VERSIONS OF THE NEWSFEED IF USER IS ADMIN OR NOT
+					if(is_user_an_admin == 1){
+						window.location.href = "main.html";
+						getNewsFeed();
+						
+					}
+					else if(is_user_an_admin == 0){
+						
+						getNewsFeed();
+						
+					}*/
+					
+					
+					
+				//getNewsFeed();
+				//localStorage.password=data.pw;
+		
+
+
 				
 				
-				localStorage.password=data.pw;
-				
-				
-                window.location.href = "main.html";
+                
 				//alert("Login Successful");
             }
         }).fail(function (data) {
@@ -321,19 +811,14 @@ myApp.onPageInit('login', function (page) {
 		
         e.preventDefault();
     });
-	}
+	//}
+	/*
 	else if(localStorage.username !== ""|| localStorage.username !== null || localStorage.username !== "null" || localStorage.username !== "undefined" || localStorage.password !== ""|| localStorage.password !== null || localStorage.password !== "null" || localStorage.password !== "undefined"){
 		window.location.href = "main.html";
+		
 	}
-	
+	*/
   });
-
-
-myApp.onPageInit('main', function (page) {
-	
-
-	
-});
 
 
 
@@ -383,9 +868,9 @@ function getSchool(){
 			alert('Fail');
         });
 	}
-	
+
+//SCHOOL DIRECTORY - schoolDirectory.html	
 myApp.onPageInit('schoolDirectory', function(page){
-	
 	
 	
 	
@@ -481,29 +966,6 @@ myApp.onPageInit('schoolDirectory', function(page){
 	
 	
 	
-	/*
-	$('#list').on('taphold', '#school_address',function(){
-		var geocoder = new google.maps.Geocoder();
-		var pos;
-		
-		alert('pressed');
-		
-		geocoder.geocode({'address' : _school_address}, function(results, status){
-			if (status === 'OK'){
-				pos = results[0].geometry.location;
-				lat = pos.lat();
-				lng = pos.lng();
-				var url = 'http://maps.google.com/?ie=UTF8&hq=&ll='+ lat + ',' + lng + '&z=20';
-				window.open(url);
-			}
-		});
-		
-				
-
-	});
-	*/
-	
-	
 	$('#list2').on('click', '#site-btn',function(){
 		
 		window.open(_school_website, '_blank', 'toolbar=yes');
@@ -514,10 +976,6 @@ myApp.onPageInit('schoolDirectory', function(page){
 	
 	
 });
-
-
-
-
 
 
 
@@ -623,12 +1081,10 @@ function getTitle(){
 
 
 
-
+//CORPORATE DIRECTORY - corporateDirectory.html
 myApp.onPageInit('corporateDirectory', function(page){
 	
-	
 
-	
 	
 	$.ajax({
 		type : 'POST',
@@ -666,7 +1122,21 @@ myApp.onPageInit('corporateDirectory', function(page){
 
 });
 
+//HELP AND SUPPORT - help_and_support.html
+myApp.onPageInit('help_support', function(page){
 
+	$('#email_link').on('click', function(){
+		var email = $("#email_link").text();
+		
+        window.open('mailto:' + email, '_system');
+    
+  
+  
+	});
+	
+});
+
+//PROFILE PAGE  -  contact_info.html
 myApp.onPageInit('contact_info', function(page){
 	
 	
@@ -694,9 +1164,7 @@ myApp.onPageInit('contact_info', function(page){
 			alert('not data success');
 		} else {
 			// display success message
-			
-		
-		
+
 			$('#title').append(data.Title);
 			$('#phone').append(data.Phone);
 			$('#email').append(data.E_Mail);
@@ -714,7 +1182,7 @@ myApp.onPageInit('contact_info', function(page){
 	// User can dial a phone number just by clicking on the link
 	$('#list1').on('click', '#phone_num', function(){
 		
-		var phone_num = $("#phone").text()
+		var phone_num = $("#phone").text();
 		
 		myApp.confirm('Call  ' + phone_num, function () {
 			
@@ -737,22 +1205,10 @@ myApp.onPageInit('contact_info', function(page){
       {
         text: 'Cancel',
         onClick: function() {
+			
         }
       },
-	  
-      {
-        
-		text: 'Copy',
-        onClick: function() {
-			
-			
-		  	
-	
-        }
-      },
-	  
-	  
-	  
+	  	  
       {
         text: 'OK',
         bold: true,
@@ -761,170 +1217,585 @@ myApp.onPageInit('contact_info', function(page){
         }
       },
     ]
-  })
+  });
 });
 	
 
 });
 
+function checkIfUserIsAdmin(){
+	
+
+	return is_user_an_admin;
+}
 
 
-myApp.onPageInit('emailpage', function(page){
+
+function removeImage(){
+	//REMOVED SELECTED IMAGE 
+	var image = document.getElementById('myImage');
+	var closeBtn = document.getElementById('close');
+	image.parentNode.removeChild(image);
+	closeBtn.parentNode.removeChild(closeBtn);
+	imgURI = null;
+	setPhotoSelected(false);
 	
-	/*
-	if(device.platform === 'iOS'){
-		window.open("ms-outlook://",'_system');
-	}
+}
+
+var filename;
+
+function uploadPhoto(imageURI) {
+			
+	var options = new FileUploadOptions();
+	options.fileKey="file";
+	//options.fileName= imageURI.substr(imageURI.lastIndexOf('/')+1);
+	options.fileName='image_'+Math.floor((Math.random() * 10000) + 1)+'.jpg';
+	filename = options.fileName;
+	options.mimeType="image/jpeg";
 	
-	else if(device.platform === 'Android') {
-        //Android uses different URL schemes to launch external apps - 
-		//insert for android here
+	
+	//var params = new Object();
+	//params.value1 = "test";
+	//params.value2 = "param";
+
+	//options.params = params;
+	options.chunkedMode = false;
+	
+	
+
+	
+	var ft = new FileTransfer();
+	//alert('uploading');
+	ft.upload(imageURI, "http://athena.ecs.csus.edu/~dteam/upload.php", win, fail, options);
+	
+
+}
+	
+	
+function win(r) {
+	//SUCCESSFULLY UPLOADED FILE TO SERVER
+	
+	console.log("Code = " + r.responseCode);
+	console.log("Response = " + r.response);
+	console.log("Sent = " + r.bytesSent);
+	
+}
+
+function fail(error) {
+	//FAILED TO UPLOAD FILE TO SERVER
+	
+	console.log("An error has occurred: Code = " + error.code);
+	console.log("upload error source " + error.source);
+    console.log("upload error target " + error.target);
+	
+	
+}
+
+
+
+
+var imgURI;
+var photo_selected = false;
+
+function getPhotoSelected(){
+	
+	return photo_selected;
+	
+}
+function setPhotoSelected(value){
+	photo_selected = value;
+}
+
+
+
+myApp.onPageInit('post_news_story', function (page) {
+	
+	
+
+
+	
+	$('#camera_roll').on('click',function(){
 		
-    }	
-	
-	
-	*/
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-});
+			navigator.camera.getPicture(onSuccess, onFail, { 
+			quality: 50,
+			targetWidth: 640,
+			targetHeight: 480,
+			sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+			destinationType: Camera.DestinationType.FILE_URI,
+			encodingType: Camera.EncodingType.JPEG
+		});
 
+		function onSuccess(imageURI) {
+			
+			$('#img-block').append('<img  id="myImage" style="width: 70px; height: 70px; display: none; border:1px solid #d3d3d3; border-radius: 10px;" >');
+			$('#img-block').append('<button id="close" onclick="removeImage();" style="position: absolute; top: 0; right: 0;display: none; color: #696969; border-radius: 100%; height: 30px; background-color: #d3d3d3; border: none;"><b>X</b></button>');
+			
+			setPhotoSelected(true);
+			
+			
+			var image = document.getElementById('myImage');
+			var closeBtn = document.getElementById('close');
+			// This function is used for unhide the image elements
+			image.style.display = 'block';
+			closeBtn.style.display = 'block';
+			// This function is used to display the captured image
+			//image.src = "data:image/jpeg;base64," + imageData;
+			image.src = imageURI;
+			imgURI = imageURI;
+	
 
-myApp.onPageInit('subfinder', function(page){
+			
+		}
 
-	//window.open('http://www.stocktonusd.net/Page/3001', '_blank', 'toolbar=yes');
-	
-	
-	//$('#subfinder-link').on('click', function(){
-
-    
-	
-	
-	
-	cordova.ThemeableBrowser.open('http://google.com', '_blank', {
-		statusbar: {
-			color: '#ffffffff'
-		},
-		toolbar: {
-			height: 44,
-			color: '#f0f0f0ff'
+		function onFail(message) {
+			
 		}
 		
 	});
 	
-	
 
-	//});
-	//window.open('http://www.stocktonusd.net/Page/3001', '_blank', 'toolbar=yes');
 	
 	
-	/*
-
-	$('#subfinder-link').on('click', function(){
-		window.open('http://www.stocktonusd.net/Page/3001', '_blank', 'toolbar=yes');
+	
+	$('#submit-btn').on('click',function(){
 		
-
-	});
-	*/
-	
-	
-	
-	
-	
-	
-});
-
-
-
-myApp.onPageInit('gosignmeup', function(page){
-
-	//window.open('https://gsmu.stocktonusd.net/dev_students.asp?action=login&misc=897', '_blank', 'toolbar=yes');
-	
-	
+		
+		var title = $('input[name="form-title"]').val();
+		var description = $('textarea[name="form-description"]').val();
+		var body = $('textarea[name="form-body"]').val();
+		var input_has_errors = false;
 		
 		
 	
-	
-	
-});
+		
+		
 
+		//CHECK IF INPUTS ARE EMPTY - IF SO, THEN SHOW ERROR ALERT	
+		if((title==null || title=="") || (description==null || description=="") || (body==null || body=="")){
+			input_has_errors = true;
+			myApp.alert('All fields are required','Error');
+		}
+		
+		
 
-
-
-
-
-
-
-function initMap(){
-		var map;
-		var mapOptions = {
-			zoom: 12,
-			center: {lat: 45, lng: -86}
-		};
-		map = new google.maps.Map(document.getElementById('map-canvas'),
-			mapOptions);
+		
+		
+		var photo = getPhotoSelected();
+		
+		
+		//IF INPUT HAS NO ERRORS
+		if(!input_has_errors && (photo == true)){
 			
-		var directionsDisplay = new google.maps.DirectionsRenderer;
-		var directionsService = new google.maps.DirectionsService;
-		var infoWindow = new google.maps.InfoWindow();
+			uploadPhoto(imgURI);
+			var img_filename = filename;
+			// get the form data
+			var formData = {
+				'title' : $('input[name="form-title"]').val(),
+				'description' : $('textarea[name="form-description"]').val(),
+				'body' : $('textarea[name="form-body"]').val(),
+				'img_filename' : img_filename
+			};
+			
+			
+			$.ajax({
+				type : 'POST',
+				url  : 'http://athena.ecs.csus.edu/~dteam/post_news_story.php',
+				data : formData,
+				dataType : 'json',
+				encode : true
+			}).done(function (data) {
+				// handle errors
+				if (!data.success) {
+					myApp.alert('An error occurred');
+					
+				} else {
+					// display success message
+					myApp.alert('Posted!');
+					
+					//mainView.router.loadPage('main.html')
+					setTimeout(function () {
+					
+						
+						window.location.href="main.html";
+						
+					}, 500);
 		
-		directionsDisplay.setMap(map);
-		directionsDisplay.setPanel(document.getElementById('text-panel'));
-		
-		if (navigator.geolocation) {
-			  navigator.geolocation.getCurrentPosition(function(position) {
-				var pos = {
-				  lat: position.coords.latitude,
-				  lng: position.coords.longitude
-				};
-
-				map.setCenter(pos);
-				displayRoute(directionsService, directionsDisplay, pos);
+					
+					
 				
-			  }, function() {
-				handleLocationError(true, infoWindow, map.getCenter());
-			  });
-			} else {
-			  // Browser doesn't support Geolocation
-			  handleLocationError(false, infoWindow, map.getCenter());
-			}
-		  
+				}
+			}).fail(function (data) {
+				// for debug
+				
+				alert('Server error');
+			});
+		
+		}
+		else if(!input_has_errors && (photo == false)){
+			
+			var formData = {
+				'title' : $('input[name="form-title"]').val(),
+				'description' : $('textarea[name="form-description"]').val(),
+				'body' : $('textarea[name="form-body"]').val(),
+				'img_filename' : null
+			};
+			
+			
+			$.ajax({
+				type : 'POST',
+				url  : 'http://athena.ecs.csus.edu/~dteam/post_news_story.php',
+				data : formData,
+				dataType : 'json',
+				encode : true
+			}).done(function (data) {
+				// handle errors
+				if (!data.success) {
+					myApp.alert('An error occurred');
+					
+				} else {
+					// display success message
+					myApp.alert('Posted!');
+					
+					mainView.router.loadPage('main.html')
 
-		  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-			//infoWindow.setPosition(pos);
-		  }
+				}
+			}).fail(function (data) {
+				// for debug
+				
+				console.log('Server error');
+			});
+			
+	
+		}
+		
+		
+		
+		
+			
+	});
+	
+	
+});
 
-		  
+
+
+function loadNewsStory(id){
+	
+	
+	
+	
+	var formData = {
+				
+		'ID' : id
+            
+	};
+			
+			
+			
+	$.ajax({
+	type : 'POST',
+	url  : 'http://athena.ecs.csus.edu/~dteam/load_news_story.php',
+	data : formData,
+	dataType : 'json',
+	encode : true
+	}).done(function (data) {
+	// handle errors
+	if (!data.success) {
+		// YEE
+		alert('error');
+	} else {
+		// display success message
+		//RELOAD THE NEWS FEED PAGE
+		var title = data['TITLE'];
+		
+		var body = data['BODY'];
+		var date_posted = data['DATE_POSTED'];
+		var filename = data['IMAGE_FILENAME'];
+		
+		//myApp.alert(sessionStorage.title);
+		
+		if((filename == null) || (filename == "")){
+			
+			var newPageContent = '<div class="navbar">'+
+							'<div class="navbar-inner">'+
+					
+								'<div class="left">'+
+									'<a href="#" class="back">'+
+										'<i class="icon icon-back"></i>'+
+									'</a>'+
+								'</div>'+
+								'<div class="center">'+
+									'<img src="icon/susd-logo.png" style="width: 40px; height: 30px;"></img>'+
+								'</div>'+
+								'<div class="right">'+
+									'<a href="#" class="link icon-only open-panel">'+
+										'<i class="fa fa-bars"></i>'+
+									'</a>'+
+								'</div>'+
+							'</div>'+
+						'</div>'+
+						'<div class="page" data-page="my_news_story_page">' +
+							'<div class="page-content">' +
+								'<div class="content-block">'+
+									'<div class="content-block-title" id="news_story_title"><h3><strong>'+title+'</strong></h3></div>'+
+									
+									
+								
+									'<div class="content-block-inner" id="news_story_paragraph"><p style="color: grey;">Posted on '+date_posted+'</p><p>'+body+'</p></div>'+
+									
+								'</div>'+
+							
+							'</div>' +
+                      '</div>';
+			
+		}
+		else {
+		
+		var URI = 'http://athena.ecs.csus.edu/~dteam/susd_newsfeed_images/'+filename;
+		
+		var newPageContent = '<div class="navbar">'+
+							'<div class="navbar-inner">'+
+					
+								'<div class="left">'+
+									'<a href="#" class="back">'+
+										'<i class="icon icon-back"></i>'+
+									'</a>'+
+								'</div>'+
+								'<div class="center">'+
+									'<img src="icon/susd-logo.png" style="width: 40px; height: 30px;"></img>'+
+								'</div>'+
+								'<div class="right">'+
+									'<a href="#" class="link icon-only open-panel">'+
+										'<i class="fa fa-bars"></i>'+
+									'</a>'+
+								'</div>'+
+							'</div>'+
+						'</div>'+
+						'<div class="page" data-page="my_news_story_page">' +
+							'<div class="page-content">' +
+								'<div class="content-block">'+
+									'<div class="content-block-title" id="news_story_title"><h3><strong>'+title+'</strong></h3></div>'+
+									
+									
+								
+									'<div class="content-block-inner" id="news_story_paragraph"><img id="image" src="'+URI+'" style="display: block; width: 100%; height: 50%;"/><p style="color: grey;">Posted on '+date_posted+'</p><p>'+body+'</p></div>'+
+									
+								'</div>'+
+							
+							'</div>' +
+                      '</div>';
+					  
+		}				
+	
+
+	
+	mainView.router.loadContent(newPageContent);
+		
+
+		
+		
+	}
+	}).fail(function (data) {
+		// for debug 
+	
+		alert('An error occured ');
+	});
+			
+	
+	
+	
+	
+	return;
 }
-function displayRoute(directionsService, directionsDisplay, pos){
-	var start = pos;
-	var end = _school_address;
 
-	directionsService.route({
-		origin: start,
-		destination: end,
-		travelMode: 'DRIVING'
-	}, function(response, status){
-			if (status === 'OK'){
-				directionsDisplay.setDirections(response);
-			}else{
-				alert('Direction request failed due to ' + status);
+function deleteNewsStory(id,img_filename){
+	
+	
+	
+	myApp.modal({
+    title:  'Delete Post?',
+    buttons: [
+      {
+        text: 'Cancel',
+        onClick: function() {
+			
+        }
+      },
+	  
+      {
+        text: 'OK',
+        bold: true,
+        onClick: function() {
+			
+			
+			var formData = {
+				'ID' : id,
+				'img_filename': img_filename
+            
+			};
+			
+			
+			
+			$.ajax({
+			type : 'POST',
+			url  : 'http://athena.ecs.csus.edu/~dteam/delete_news_story.php',
+			data : formData,
+			dataType : 'json',
+			encode : true
+			}).done(function (data) {
+			// handle errors
+			if (!data.success) {
+				// YEE
+				alert('error');
+			} else {
+				// display success message
+				//RELOAD THE NEWS FEED PAGE
+				mainView.router.reloadPage('main.html');
+				
+
 			}
+			}).fail(function (data) {
+				// for debug 
+			
+				alert('An error occured ');
+			});
+	
+			
+
+ 
+		  
+		  
+        }
+      },
+    ]
+  });
+  
+  
+  
+  
+  
+}
+
+
+function getNewsFeedWithPrivileges(){
+	
+	//DISPLAY OPTION TO CREATE A NEW POST -ADMIN ONLY
+	$('#post_new_story_link').append('<ul> <li> <a href="#" class="item-link" id="new_post"> <div class="item-content"> <div class="item-media"><i class="fa fa-plus-square-o fa-2x" style="color:#007aff;"></i></div> <div class="item-inner"><p>Post to News Feed</p> </div> </div> </a> </li> </ul>');
+	
+
+	//GET OUR NEWSFEED WITH ADMIN PRIVELAGES
+	$.ajax({
+		type : 'POST',
+		url  : 'http://athena.ecs.csus.edu/~dteam/susd_get_newsfeed.php',
+		dataType : 'json',
+		encode : true
+	}).done(function (data) {
+		// handle errors
+		if (!data.success) {
+			// YEE
+			alert('error');
+		} else {
+			// display success message
+
+			
+			var row_count = data.length;
+			
+			for(var i = 0; i < row_count; i++){
+				
+				var filename = data[i]['IMAGE_FILENAME'];
+				
+				if((filename == null) || (filename == "")){
+					
+					$('#newsfeed').append('<div class="card" > <div class="card-header" id="title"><b>'+data[i]['TITLE']+'</b></div> <div class="card-content"> <div class="card-content-inner" id="content-inner"><p id="date" class="color-gray">Posted on '+data[i]['DATE_POSTED']+'</p><p id="description">'+data[i]['DESCRIPTION']+'</p></div> </div> <div class="card-footer"><a href="#" class="link" id="readmore"  onclick="loadNewsStory(\''+data[i]['ID']+'\');">Read More</a><a href="#" id="delete_post" onclick="deleteNewsStory(\''+data[i]['ID']+'\',\''+data[i]['IMAGE_FILENAME']+'\')" class="link open-3-modal" style="color:red;">Delete</a></div> </div>');
+
+				} else {
+				
+					d = new Date();
+					var URI = 'http://athena.ecs.csus.edu/~dteam/susd_newsfeed_images/'+filename;
+					
+				
+					//$('#newsfeed').append('<img id="image" src="'+URI+'" style="display: block; width: 100%; height: 50%;"/>');																																																																																																			
+					
+					$('#newsfeed').append('<div class="card" > <div class="card-header" id="title"><b>'+data[i]['TITLE']+'</b></div> <div class="card-content"> <div class="card-content-inner" id="content-inner"><p id="date" class="color-gray">Posted on '+data[i]['DATE_POSTED']+'</p><img id="image" src="'+URI+'" style="display: block; width: 100%; height: 50%;"/><p id="description">'+data[i]['DESCRIPTION']+'</p></div> </div> <div class="card-footer"><a href="#" class="link" id="readmore"  onclick="loadNewsStory(\''+data[i]['ID']+'\');">Read More</a><a href="#" id="delete_post" onclick="deleteNewsStory(\''+data[i]['ID']+'\',\''+data[i]['IMAGE_FILENAME']+'\')" class="link open-3-modal" style="color:red;">Delete</a></div> </div>');
+				
+					
+			
+				}
+				
+				
+			}
+
+
+			
+
+		}
+	}).fail(function (data) {
+		// for debug 
+		
+		alert('fail');
+	});
+	
+} 
+
+
+function getNewsFeedReadOnly(){
+
+	//DISPLAY NEWS FEED WITHOUT ABILITY TO MAKE A NEW POST, OR DELETE ANY POST - READ ONLY
+	
+	$.ajax({
+		type : 'POST',
+		url  : 'http://athena.ecs.csus.edu/~dteam/susd_get_newsfeed.php',
+		dataType : 'json',
+		encode : true
+	}).done(function (data) {
+		// handle errors
+		if (!data.success) {
+			// YEE
+			alert('error');
+		} else {
+			// display success message
+
+			
+			var row_count = data.length;
+			
+			for(var i = 0; i < row_count; i++){
+				
+				var filename = data[i]['IMAGE_FILENAME'];
+				
+				if((filename == null) || (filename == "")){
+					
+					$('#newsfeed').append('<div class="card" > <div class="card-header" id="title"><b>'+data[i]['TITLE']+'</b></div> <div class="card-content"> <div class="card-content-inner" id="content-inner"><p id="date" class="color-gray">Posted on '+data[i]['DATE_POSTED']+'</p><p id="description">'+data[i]['DESCRIPTION']+'</p></div> </div> <div class="card-footer"><a href="#" class="link" id="readmore"  onclick="loadNewsStory(\''+data[i]['ID']+'\');">Read More</a></div> </div>');
+					
+
+				} else {
+				
+				
+					var URI = 'http://athena.ecs.csus.edu/~dteam/susd_newsfeed_images/'+filename;
+				
+				
+					$('#newsfeed').append('<div class="card" > <div class="card-header" id="title"><b>'+data[i]['TITLE']+'</b></div> <div class="card-content"> <div class="card-content-inner" id="content-inner"><p id="date" class="color-gray">Posted on '+data[i]['DATE_POSTED']+'</p><img id="image" src="'+URI+'" style="display: block; width: 100%; height: 50%;"/><p id="description">'+data[i]['DESCRIPTION']+'</p></div> </div> <div class="card-footer"><a href="#" class="link" id="readmore"  onclick="loadNewsStory(\''+data[i]['ID']+'\');">Read More</a></div> </div>');
+					
+
+			
+				}
+				
+				
+				
+				//$('#newsfeed').append('<div class="card" > <div class="card-header" id="title"><b>'+data[i]['TITLE']+'</b></div> <div class="card-content"> <div class="card-content-inner"><p id="date" class="color-gray">Posted on '+data[i]['DATE_POSTED']+'</p><p id="description">'+data[i]['DESCRIPTION']+'</p><img id="image" src="" width="100%"></div> </div> <div class="card-footer"><a href="#" class="link" id="readmore"  onclick="loadNewsStory(\''+data[i]['BODY']+'\',\''+data[i]['TITLE']+'\');">Read More</a></div> </div>');
+				
+			}	
+
+		}
+	}).fail(function (data) {
+		// for debug 
+		
+		alert('fail');
 	});
 
-}
-	
-myApp.onPageInit('schoolDirections', function(page){
-	initMap();
-});
+} 
+
+
+
        
 
 

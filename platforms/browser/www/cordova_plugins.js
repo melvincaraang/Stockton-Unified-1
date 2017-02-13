@@ -618,15 +618,7 @@ module.exports = [
         "clobbers": [
             "appAvailability"
         ]
-    },
-	{
-        "file": "plugins/cordova-plugin-themeablebrowser/www/themeablebrowser.js",
-        "id": "cordova-plugin-themeablebrowser.themeablebrowser",
-        "clobbers": [
-            "cordova.ThemeableBrowser"
-        ]
     }
-	
 ];
 module.exports.metadata = 
 // TOP OF METADATA
