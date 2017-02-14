@@ -8,11 +8,11 @@ Developed by the The DreamTeam at CSU Sacramento using the Adobe Phonegap Framwo
 
 #### Platforms
 
-Tested on Android Nougat 7.0 and iOS 10.2
+	Tested on Android Nougat 7.0 and iOS 10.2
 
 #### Compile
 
-Compile using build.phonegap.com using this page's .git link. A developer key is needed for iOS devices
+	Compile using build.phonegap.com using this page's .git link. A developer key is needed for iOS devices
 
 #### Features
 
