@@ -4,17 +4,17 @@ A mobile application for the Stockton Unified School District designed for Andro
 
 Developed by the The DreamTeam at CSU Sacramento using the Adobe Phonegap Framwork.
 
-# # Usage
+## Usage
 
-# # # # Platforms
+#### Platforms
 
 Tested on Android Nougat 7.0 and iOS 10.2
 
-# # # # Compile
+#### Compile
 
 Compile using build.phonegap.com using this page's .git link. A developer key is needed for iOS devices
 
-# # # # Features
+#### Features
 
 	Calendar
 	News Feed
